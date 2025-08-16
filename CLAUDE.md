@@ -79,11 +79,39 @@ This document provides context for AI assistants working on the VA Computer Guy 
 - Keep components modular and reusable
 
 ### Brand Guidelines
-- Professional, trustworthy appearance
-- Clean, modern design
-- Accessible to all users
-- Mobile-first responsive design
-- Use real business information (not placeholder data)
+
+#### Visual Identity & Core Colors
+- Professional, trustworthy appearance with clean, modern design
+- WCAG 2.1 AA compliant, mobile-first responsive design
+- **VA Primary**: `#0170B9` - Main brand blue for CTAs, links
+- **VA Secondary**: `#4054B2` - Secondary blue for accents  
+- **VA Accent**: `#61CE70` - Green for success/positive actions
+- **Text Colors**: `#4B4F58` (primary), `#7A7A7A` (secondary), `#808285` (muted)
+- **Neutrals**: `#FFFFFF`, `#F5F5F5`, `#E5E5E5`, `#DDDDDD`, `#424242`, `#3A3A3A`, `#000000`
+
+#### Typography & Layout
+**Fonts**: Montserrat (headings, 600), Montserrat Alternates (navigation), Roboto (body, 400)
+**Containers**: 1200px (normal), 750px (narrow) | **Spacing**: 8px-48px scale | **Radius**: 10px
+
+#### Components & Classes
+**Buttons**: `.va-btn-primary` (blue), `.va-btn-accent` (green), `.va-btn-secondary` (neutral)
+**Layout**: `.va-container`, `.va-card`, `.va-section-*` | **Typography**: `.font-montserrat`, `.font-roboto`
+**Colors**: `.text-va-primary`, `.bg-va-primary`, `.border-va-neutral-200`
+
+#### Key CSS Variables
+```css
+/* Core Brand Colors */
+--va-primary: #0170B9; --va-secondary: #4054B2; --va-accent: #61CE70;
+--va-text-primary: #4B4F58; --va-text-secondary: #7A7A7A; --va-text-muted: #808285;
+--va-neutral-50: #FFFFFF; --va-neutral-100: #F5F5F5; --va-neutral-200: #E5E5E5;
+
+/* Typography & Layout */
+--font-montserrat: 'Montserrat', system-ui; --font-roboto: 'Roboto', system-ui;
+--va-container-width: 1200px; --va-spacing-md: 1rem; --va-spacing-xl: 2rem;
+```
+
+**Accessibility**: Maintain 4.5:1 contrast ratios, semantic HTML, ARIA labels, keyboard navigation
+**Dark Mode**: CSS variables automatically handle theme switching across all components
 
 ### Key User Flows
 1. **Service Discovery**: Home → Service Category → Specific Service → Contact/Booking

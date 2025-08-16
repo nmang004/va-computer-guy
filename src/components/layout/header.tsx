@@ -37,10 +37,10 @@ const Header = () => {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 bg-primary rounded flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-sm">VA</span>
+            <div className="h-8 w-8 bg-va-primary rounded flex items-center justify-center">
+              <span className="text-va-neutral-50 font-montserrat font-bold text-sm">VA</span>
             </div>
-            <span className="font-bold text-xl">Computer Guy</span>
+            <span className="font-montserrat font-bold text-xl text-va-text-primary">Computer Guy</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -116,11 +116,11 @@ const Header = () => {
 
           {/* Contact Info & CTA */}
           <div className="hidden lg:flex items-center space-x-4">
-            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-              <Phone className="h-4 w-4" />
-              <span>(757) 375-6764</span>
+            <div className="flex items-center space-x-2 text-sm text-va-text-secondary">
+              <Phone className="h-4 w-4 text-va-primary" />
+              <span className="font-roboto">(757) 375-6764</span>
             </div>
-            <Button asChild>
+            <Button asChild className="va-btn-primary">
               <Link href="/booking">Book Appointment</Link>
             </Button>
           </div>
@@ -140,10 +140,10 @@ const Header = () => {
                   className="flex items-center space-x-2 pb-4 border-b"
                   onClick={() => setIsOpen(false)}
                 >
-                  <div className="h-8 w-8 bg-primary rounded flex items-center justify-center">
-                    <span className="text-primary-foreground font-bold text-sm">VA</span>
+                  <div className="h-8 w-8 bg-va-primary rounded flex items-center justify-center">
+                    <span className="text-va-neutral-50 font-montserrat font-bold text-sm">VA</span>
                   </div>
-                  <span className="font-bold text-xl">Computer Guy</span>
+                  <span className="font-montserrat font-bold text-xl text-va-text-primary">Computer Guy</span>
                 </Link>
 
                 <div className="space-y-4">
@@ -205,11 +205,11 @@ const Header = () => {
                 </div>
 
                 <div className="pt-4 border-t space-y-4">
-                  <div className="flex items-center space-x-2 text-sm">
-                    <Phone className="h-4 w-4" />
-                    <span>(757) 375-6764</span>
+                  <div className="flex items-center space-x-2 text-sm text-va-text-secondary">
+                    <Phone className="h-4 w-4 text-va-primary" />
+                    <span className="font-roboto">(757) 375-6764</span>
                   </div>
-                  <Button asChild className="w-full">
+                  <Button asChild className="w-full va-btn-primary">
                     <Link href="/booking" onClick={() => setIsOpen(false)}>
                       Book Appointment
                     </Link>

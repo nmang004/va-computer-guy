@@ -6,9 +6,9 @@ import { ArrowLeft, Phone, Award, Users, Clock, MapPin } from "lucide-react";
 
 export default function AboutPage() {
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="va-container py-8">
       <div className="mb-6">
-        <Button variant="ghost" asChild>
+        <Button variant="ghost" asChild className="text-va-text-secondary hover:text-va-primary">
           <Link href="/">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
@@ -18,25 +18,25 @@ export default function AboutPage() {
 
       <div className="max-w-4xl mx-auto">
         <div className="text-center mb-12">
-          <Badge variant="secondary" className="mb-4">About Us</Badge>
-          <h1 className="text-4xl font-bold mb-4">Your Local Technology Experts</h1>
-          <p className="text-lg text-muted-foreground">
+          <Badge variant="secondary" className="mb-4 bg-va-secondary text-va-neutral-50 font-montserrat">About Us</Badge>
+          <h1 className="text-4xl font-montserrat font-bold mb-4 text-va-text-primary">Your Local Technology Experts</h1>
+          <p className="text-lg text-va-text-secondary font-roboto">
             Serving Virginia Beach and Hampton Roads with professional computer repair and IT support since 2010
           </p>
         </div>
 
         <div className="grid gap-8 mb-12">
-          <Card>
+          <Card className="va-card">
             <CardHeader>
-              <CardTitle>Our Story</CardTitle>
+              <CardTitle className="font-montserrat text-va-text-primary">Our Story</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground mb-4">
+              <p className="text-va-text-secondary font-roboto mb-4">
                 VA Computer Guy was founded in 2010 with a simple mission: to provide honest, reliable, and 
                 professional computer repair services to our local community. What started as a small operation 
                 has grown into the most trusted technology service provider in the Virginia Beach and Hampton Roads area.
               </p>
-              <p className="text-muted-foreground">
+              <p className="text-va-text-secondary font-roboto">
                 We believe that technology should work for you, not against you. That&apos;s why we&apos;ve built our 
                 reputation on transparent pricing, quality workmanship, and exceptional customer service. From 
                 simple virus removals to complex network installations, we treat every customer like family.
@@ -45,30 +45,30 @@ export default function AboutPage() {
           </Card>
 
           <div className="grid md:grid-cols-2 gap-6">
-            <Card>
+            <Card className="va-card">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Award className="h-5 w-5 text-primary" />
+                <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
+                  <Award className="h-5 w-5 text-va-primary" />
                   Our Mission
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground">
+                <p className="text-va-text-secondary font-roboto">
                   To provide fast, reliable, and affordable technology solutions that help our customers 
                   stay connected, productive, and secure in an increasingly digital world.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="va-card">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-primary" />
+                <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
+                  <Users className="h-5 w-5 text-va-primary" />
                   Our Values
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="text-muted-foreground space-y-1">
+                <ul className="text-va-text-secondary font-roboto space-y-1">
                   <li>• Honesty and transparency in all interactions</li>
                   <li>• Quality workmanship with attention to detail</li>
                   <li>• Respect for our customers&apos; time and budget</li>
@@ -78,30 +78,30 @@ export default function AboutPage() {
             </Card>
           </div>
 
-          <Card>
+          <Card className="va-card">
             <CardHeader>
-              <CardTitle>Why Choose VA Computer Guy?</CardTitle>
+              <CardTitle className="font-montserrat text-va-text-primary">Why Choose VA Computer Guy?</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-3 gap-6">
                 <div className="text-center">
-                  <Clock className="h-12 w-12 mx-auto text-primary mb-3" />
-                  <h3 className="font-semibold mb-2">15+ Years Experience</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <Clock className="h-12 w-12 mx-auto text-va-primary mb-3" />
+                  <h3 className="font-montserrat font-semibold mb-2 text-va-text-primary">15+ Years Experience</h3>
+                  <p className="text-sm text-va-text-secondary font-roboto">
                     Over a decade of experience fixing computers and solving IT challenges
                   </p>
                 </div>
                 <div className="text-center">
-                  <Award className="h-12 w-12 mx-auto text-primary mb-3" />
-                  <h3 className="font-semibold mb-2">Certified Technicians</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <Award className="h-12 w-12 mx-auto text-va-primary mb-3" />
+                  <h3 className="font-montserrat font-semibold mb-2 text-va-text-primary">Certified Technicians</h3>
+                  <p className="text-sm text-va-text-secondary font-roboto">
                     Our team holds industry certifications and stays current with technology
                   </p>
                 </div>
                 <div className="text-center">
-                  <MapPin className="h-12 w-12 mx-auto text-primary mb-3" />
-                  <h3 className="font-semibold mb-2">Local & Trusted</h3>
-                  <p className="text-sm text-muted-foreground">
+                  <MapPin className="h-12 w-12 mx-auto text-va-primary mb-3" />
+                  <h3 className="font-montserrat font-semibold mb-2 text-va-text-primary">Local & Trusted</h3>
+                  <p className="text-sm text-va-text-secondary font-roboto">
                     Proudly serving our local community with personalized service
                   </p>
                 </div>
@@ -109,15 +109,15 @@ export default function AboutPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="va-card">
             <CardHeader>
-              <CardTitle>Our Certifications & Expertise</CardTitle>
+              <CardTitle className="font-montserrat text-va-text-primary">Our Certifications & Expertise</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold mb-2">Certifications</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+                  <h4 className="font-montserrat font-semibold mb-2 text-va-text-primary">Certifications</h4>
+                  <ul className="text-sm text-va-text-secondary font-roboto space-y-1">
                     <li>• CompTIA A+ Certified</li>
                     <li>• Microsoft Certified Professional</li>
                     <li>• Apple Certified Mac Technician</li>
@@ -125,8 +125,8 @@ export default function AboutPage() {
                   </ul>
                 </div>
                 <div>
-                  <h4 className="font-semibold mb-2">Specializations</h4>
-                  <ul className="text-sm text-muted-foreground space-y-1">
+                  <h4 className="font-montserrat font-semibold mb-2 text-va-text-primary">Specializations</h4>
+                  <ul className="text-sm text-va-text-secondary font-roboto space-y-1">
                     <li>• Windows & macOS Systems</li>
                     <li>• Network Administration</li>
                     <li>• Data Recovery & Security</li>
@@ -139,18 +139,18 @@ export default function AboutPage() {
         </div>
 
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Ready to Experience the Difference?</h2>
-          <p className="text-muted-foreground mb-6">
+          <h2 className="text-2xl font-montserrat font-semibold mb-4 text-va-text-primary">Ready to Experience the Difference?</h2>
+          <p className="text-va-text-secondary font-roboto mb-6">
             Join thousands of satisfied customers who trust VA Computer Guy with their technology needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" asChild>
+            <Button size="lg" asChild className="va-btn-primary">
               <Link href="tel:(757)375-6764">
                 <Phone className="mr-2 h-4 w-4" />
                 Call (757) 375-6764
               </Link>
             </Button>
-            <Button size="lg" variant="outline" asChild>
+            <Button size="lg" variant="outline" asChild className="va-btn-secondary">
               <Link href="/booking">Schedule Service</Link>
             </Button>
           </div>
