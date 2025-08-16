@@ -12,7 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Menu, Phone, MapPin } from "lucide-react";
+import { Menu, Phone } from "lucide-react";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);

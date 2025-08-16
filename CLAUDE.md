@@ -195,16 +195,109 @@ GOOGLE_ANALYTICS_ID=
 - [Shadcn/UI](https://ui.shadcn.com/)
 - [Lucide Icons](https://lucide.dev/)
 
-## Deployment
+## Build & Deployment Guidelines
 
-### Current URLs
-- **Live Site**: https://va-computer-g2iufb9ez-nick-mangubats-projects.vercel.app
-- **Git Repository**: [Current local repository]
+### Pre-Deployment Checklist
+**ALWAYS run these commands before deploying:**
+
+1. **Clean Build Test**:
+   ```bash
+   npm run build
+   ```
+   - This MUST complete without errors
+   - Fix any TypeScript errors immediately
+   - Remove unused imports that cause warnings
+   - Ensure all components render properly
+
+2. **Local Testing**:
+   ```bash
+   npm run dev
+   ```
+   - Test all navigation links
+   - Verify responsive design on mobile/desktop
+   - Check contact information accuracy
+   - Validate all forms and interactions
+
+3. **Code Quality**:
+   ```bash
+   npm run lint
+   ```
+   - Fix any linting errors
+   - Address accessibility issues
+   - Clean up console warnings
 
 ### Deployment Process
-- Automatic deployment on push to main branch
-- Manual deployment: `vercel --prod`
-- Preview deployments for feature branches
+
+#### Current URLs
+- **Live Site**: https://va-computer-g2iufb9ez-nick-mangubats-projects.vercel.app
+- **GitHub Repository**: https://github.com/nmang004/va-computer-guy.git
+
+#### Deployment Steps
+1. **Test Build Locally**:
+   ```bash
+   npm run build
+   # If this fails, DO NOT deploy - fix errors first
+   ```
+
+2. **Commit Changes**:
+   ```bash
+   git add .
+   git commit -m "Descriptive commit message"
+   ```
+
+3. **Push to GitHub**:
+   ```bash
+   git push origin main
+   # This triggers automatic Vercel deployment
+   ```
+
+4. **Manual Deployment (if needed)**:
+   ```bash
+   vercel --prod
+   ```
+
+### Build Error Handling
+
+#### Common Build Issues & Solutions
+
+**TypeScript Errors**:
+- Unused imports: Remove them immediately
+- Type mismatches: Fix type definitions
+- Missing props: Add required props or make them optional
+
+**Component Errors**:
+- Missing exports: Ensure all components are properly exported
+- Import paths: Use correct relative/absolute paths
+- Missing dependencies: Install required packages
+
+**Styling Issues**:
+- Tailwind classes: Verify class names are correct
+- CSS conflicts: Check for conflicting styles
+- Responsive breakpoints: Test on all screen sizes
+
+#### Error Priority
+1. **Critical**: TypeScript compilation errors (MUST fix)
+2. **High**: ESLint errors (SHOULD fix)
+3. **Medium**: Warnings about unused variables (CLEAN UP)
+4. **Low**: Performance suggestions (OPTIMIZE when time allows)
+
+### Quality Assurance
+
+#### Before Every Deployment
+- [ ] `npm run build` passes without errors
+- [ ] All pages load correctly
+- [ ] Navigation works on mobile and desktop
+- [ ] Contact information is accurate
+- [ ] Forms are functional (even if placeholder)
+- [ ] No console errors in browser
+- [ ] Images load properly
+- [ ] Responsive design works across devices
+
+#### Performance Targets
+- Build time: < 30 seconds
+- Page load: < 3 seconds
+- Lighthouse score: > 90
+- No critical accessibility issues
 
 ---
 
