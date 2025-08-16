@@ -72,7 +72,7 @@ va-computer-guy/
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/nmang004/va-computer-guy.git
    cd va-computer-guy
    ```
 
