@@ -2,9 +2,9 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { QuoteGenerator } from "@/components/home/quote-generator";
 import { 
   Shield, 
-  Wrench, 
   Clock, 
   Star, 
   CheckCircle, 
@@ -60,7 +60,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Instant Quote Generator Placeholder */}
+      {/* Instant Quote Generator */}
       <section id="quote" className="py-16 bg-va-neutral-50">
         <div className="va-container">
           <div className="text-center mb-12">
@@ -69,33 +69,7 @@ export default function HomePage() {
               Answer a few quick questions to get an estimated repair cost
             </p>
           </div>
-          <div className="max-w-2xl mx-auto">
-            <Card className="va-card">
-              <CardHeader>
-                <CardTitle className="font-montserrat text-va-text-primary">Instant Quote Generator</CardTitle>
-                <CardDescription className="font-roboto text-va-text-secondary">
-                  Get an estimated price for your repair in under 60 seconds
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="text-center py-12">
-                <Wrench className="h-12 w-12 mx-auto text-va-text-muted mb-4" />
-                <p className="text-va-text-secondary mb-6 font-roboto">
-                  Interactive quote generator coming soon! For now, call us for immediate pricing.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button asChild className="va-btn-primary">
-                    <Link href="tel:(757)375-6764">
-                      <Phone className="mr-2 h-4 w-4" />
-                      Call (757) 375-6764
-                    </Link>
-                  </Button>
-                  <Button variant="outline" asChild className="va-btn-secondary">
-                    <Link href="/booking">Schedule Consultation</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <QuoteGenerator />
         </div>
       </section>
 
