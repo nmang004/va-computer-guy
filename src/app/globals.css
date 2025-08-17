@@ -364,4 +364,5 @@
   
   /* Interaction utilities */
   .active\:scale-98:active { transform: scale(0.98); }
+  .border-l-3 { border-left-width: 3px; }
 }

@@ -146,10 +146,10 @@ const Header = () => {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-6">
               <nav className="flex flex-col h-full">
                 {/* Header with Logo */}
-                <div className="flex items-center pb-4 border-b border-va-neutral-200 mb-6">
+                <div className="flex items-center pb-4 border-b border-va-neutral-200 mb-6 -mx-6 px-6">
                   <Link
                     href="/"
                     className="flex items-center"
@@ -166,10 +166,10 @@ const Header = () => {
                 </div>
 
                 {/* Navigation List */}
-                <div className="flex-1 overflow-y-auto space-y-6">
+                <div className="flex-1 overflow-y-auto space-y-8">
                   {/* Home Services Section */}
                   <div>
-                    <h3 className="font-montserrat font-semibold text-base text-va-primary mb-3 pb-2 border-b border-va-primary/20">
+                    <h3 className="font-montserrat font-semibold text-base text-va-primary mb-4 pb-2 border-b border-va-primary/20">
                       Home Services
                     </h3>
                     <ul className="space-y-0">
@@ -177,7 +177,7 @@ const Header = () => {
                         <li key={service.href}>
                           <Link
                             href={service.href}
-                            className="block py-3 px-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-primary/10 hover:text-va-primary hover:pl-4 border-l-2 border-transparent hover:border-va-primary"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-primary/10 hover:text-va-primary hover:pl-3 border-l-3 border-transparent hover:border-va-primary"
                             onClick={() => setIsOpen(false)}
                           >
                             {service.title}
@@ -189,7 +189,7 @@ const Header = () => {
 
                   {/* Business Services Section */}
                   <div>
-                    <h3 className="font-montserrat font-semibold text-base text-va-secondary mb-3 pb-2 border-b border-va-secondary/20">
+                    <h3 className="font-montserrat font-semibold text-base text-va-secondary mb-4 pb-2 border-b border-va-secondary/20">
                       Business Services
                     </h3>
                     <ul className="space-y-0">
@@ -197,7 +197,7 @@ const Header = () => {
                         <li key={service.href}>
                           <Link
                             href={service.href}
-                            className="block py-3 px-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-secondary/10 hover:text-va-secondary hover:pl-4 border-l-2 border-transparent hover:border-va-secondary"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-secondary/10 hover:text-va-secondary hover:pl-3 border-l-3 border-transparent hover:border-va-secondary"
                             onClick={() => setIsOpen(false)}
                           >
                             {service.title}
@@ -209,14 +209,14 @@ const Header = () => {
 
                   {/* Other Navigation Items */}
                   <div>
-                    <h3 className="font-montserrat font-semibold text-base text-va-text-primary mb-3 pb-2 border-b border-va-neutral-300">
+                    <h3 className="font-montserrat font-semibold text-base text-va-text-primary mb-4 pb-2 border-b border-va-neutral-300">
                       Other Services
                     </h3>
                     <ul className="space-y-0">
                       <li>
                         <Link
                           href="/protection-plans"
-                          className="block py-3 px-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-accent/10 hover:text-va-accent hover:pl-4 border-l-2 border-transparent hover:border-va-accent"
+                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-accent/10 hover:text-va-accent hover:pl-3 border-l-3 border-transparent hover:border-va-accent"
                           onClick={() => setIsOpen(false)}
                         >
                           Protection Plans
@@ -225,7 +225,7 @@ const Header = () => {
                       <li>
                         <Link
                           href="/repair-status"
-                          className="block py-3 px-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-4 border-l-2 border-transparent hover:border-va-neutral-400"
+                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
                           onClick={() => setIsOpen(false)}
                         >
                           Check Repair Status
@@ -234,7 +234,7 @@ const Header = () => {
                       <li>
                         <Link
                           href="/support"
-                          className="block py-3 px-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-4 border-l-2 border-transparent hover:border-va-neutral-400"
+                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
                           onClick={() => setIsOpen(false)}
                         >
                           Support
@@ -243,7 +243,7 @@ const Header = () => {
                       <li>
                         <Link
                           href="/about"
-                          className="block py-3 px-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-4 border-l-2 border-transparent hover:border-va-neutral-400"
+                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
                           onClick={() => setIsOpen(false)}
                         >
                           About Us
@@ -254,7 +254,7 @@ const Header = () => {
                 </div>
 
                 {/* Footer CTA */}
-                <div className="pt-6 border-t border-va-neutral-200 space-y-4">
+                <div className="pt-6 border-t border-va-neutral-200 space-y-4 -mx-6 px-6">
                   <div className="flex items-center space-x-2 text-sm text-va-text-secondary">
                     <Phone className="h-4 w-4 text-va-primary" />
                     <span className="font-roboto">(757) 375-6764</span>
