@@ -163,7 +163,7 @@ export const RepairTimeline: React.FC<RepairTimelineProps> = ({ currentStatus, t
       {/* Timeline Steps */}
       <div className="relative">
         {/* Continuous Background Line */}
-        <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gradient-to-b from-va-accent via-va-primary to-va-neutral-200 opacity-20" />
+        <div className="absolute left-9 top-6 bottom-6 w-0.5 bg-gradient-to-b from-va-accent via-va-primary to-va-neutral-200 opacity-20" />
         
         {visibleSteps.map((status, index) => {
           const stepStatus = getStepStatus(statusOrder.indexOf(status));
@@ -174,7 +174,7 @@ export const RepairTimeline: React.FC<RepairTimelineProps> = ({ currentStatus, t
           return (
             <div key={status} className={`relative ${!isLast ? 'pb-6' : ''}`}>
               {/* Step Card */}
-              <div className={`relative ml-2 pl-10 ${
+              <div className={`relative ml-2 pl-16 ${
                 stepStatus === 'current' 
                   ? 'bg-white border-2 border-va-primary/20 shadow-lg shadow-va-primary/10' 
                   : stepStatus === 'completed'
@@ -183,22 +183,22 @@ export const RepairTimeline: React.FC<RepairTimelineProps> = ({ currentStatus, t
               } rounded-lg p-4 transition-all duration-300`}>
                 
                 {/* Status Icon */}
-                <div className={`absolute left-4 top-4 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+                <div className={`absolute left-4 top-6 w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
                   stepStatus === 'completed' 
                     ? 'bg-va-accent text-white transform scale-100' 
                     : stepStatus === 'current'
-                    ? `${config.bgColor} text-white animate-pulse transform scale-110`
+                    ? `${config.bgColor} text-white animate-pulse transform scale-105`
                     : 'bg-white border-2 border-va-neutral-300 text-va-text-muted'
                 }`}>
                   {stepStatus === 'completed' ? (
-                    <CheckCircle className="h-6 w-6" />
+                    <CheckCircle className="h-5 w-5" />
                   ) : stepStatus === 'current' ? (
                     <div className="relative">
-                      <Circle className="h-6 w-6 fill-current" />
+                      <Circle className="h-5 w-5 fill-current" />
                       <div className="absolute inset-0 rounded-full border-2 border-white animate-ping" />
                     </div>
                   ) : (
-                    <Circle className="h-5 w-5" />
+                    <Circle className="h-4 w-4" />
                   )}
                 </div>
 
