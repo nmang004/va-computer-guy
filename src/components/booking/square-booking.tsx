@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ExternalLink, Calendar, AlertCircle, Loader2 } from "lucide-react";
+import { ExternalLink, Calendar } from "lucide-react";
 
 const SQUARE_BOOKING_URL = "https://vacomputerguy.square.site/";
 
@@ -16,57 +16,11 @@ interface SquareBookingProps {
 }
 
 export const SquareBooking: React.FC<SquareBookingProps> = ({ quoteData }) => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-
-  const handleIframeLoad = () => {
-    setIsLoading(false);
-  };
-
-  const handleIframeError = () => {
-    setIsLoading(false);
-    setHasError(true);
-  };
-
   const openSquareInNewTab = () => {
     window.open(SQUARE_BOOKING_URL, '_blank', 'noopener,noreferrer');
   };
 
-  if (hasError) {
-    return (
-      <Card className="va-card">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
-            <AlertCircle className="h-5 w-5 text-va-primary" />
-            Online Booking
-          </CardTitle>
-          <CardDescription className="font-roboto text-va-text-secondary">
-            Book your appointment through our secure online system
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="text-center py-8">
-          <Calendar className="h-16 w-16 mx-auto text-va-text-muted mb-4" />
-          <p className="text-va-text-secondary mb-6 font-roboto">
-            Ready to schedule your appointment? Click below to access our online booking system.
-          </p>
-          <div className="space-y-4">
-            <Button 
-              onClick={openSquareInNewTab}
-              className="va-btn-primary w-full sm:w-auto"
-              size="lg"
-            >
-              <ExternalLink className="mr-2 h-4 w-4" />
-              Book Appointment Online
-            </Button>
-            <p className="text-sm text-va-text-muted font-roboto">
-              Opens in a new tab for your convenience
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
+  // Always show the external link approach for better reliability
   return (
     <Card className="va-card">
       <CardHeader>
@@ -75,53 +29,70 @@ export const SquareBooking: React.FC<SquareBookingProps> = ({ quoteData }) => {
           Online Booking
         </CardTitle>
         <CardDescription className="font-roboto text-va-text-secondary">
-          Schedule your appointment directly through our booking system
+          Book your appointment through our secure Square booking system
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="relative">
-          {/* Loading state */}
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center bg-va-neutral-50 rounded-lg z-10">
-              <div className="text-center">
-                <Loader2 className="h-8 w-8 animate-spin text-va-primary mx-auto mb-2" />
-                <p className="text-sm text-va-text-secondary font-roboto">Loading booking calendar...</p>
-              </div>
-            </div>
-          )}
-          
-          {/* Iframe container */}
-          <div className="rounded-lg overflow-hidden border border-va-neutral-200">
-            <iframe
-              src={SQUARE_BOOKING_URL}
-              title="VA Computer Guy - Book Appointment"
-              className="w-full h-[600px] border-0"
-              onLoad={handleIframeLoad}
-              onError={handleIframeError}
-              sandbox="allow-same-origin allow-scripts allow-forms allow-popups"
-            />
-          </div>
-          
-          {/* Fallback button */}
-          <div className="mt-4 text-center">
+      <CardContent className="text-center py-8">
+        <div className="space-y-6">
+          {/* Main booking CTA */}
+          <div className="p-6 bg-va-primary/5 border-2 border-va-primary/20 rounded-lg">
+            <Calendar className="h-20 w-20 mx-auto text-va-primary mb-4" />
+            <h3 className="text-xl font-montserrat font-semibold text-va-text-primary mb-2">
+              Schedule Your Appointment
+            </h3>
+            <p className="text-va-text-secondary mb-6 font-roboto">
+              Click below to access our Square booking site. Look for appointment scheduling options once the site loads.
+            </p>
             <Button 
-              variant="outline" 
               onClick={openSquareInNewTab}
-              className="va-btn-secondary"
+              className="va-btn-primary"
+              size="lg"
             >
               <ExternalLink className="mr-2 h-4 w-4" />
-              Open in New Tab
+              Book Appointment Online
             </Button>
+          </div>
+          
+          {/* Instructions */}
+          <div className="text-left">
+            <h4 className="font-montserrat font-semibold text-va-text-primary mb-3 text-center">
+              Booking Instructions:
+            </h4>
+            <div className="grid gap-3 text-sm">
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 bg-va-primary text-va-neutral-50 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                  1
+                </span>
+                <p className="text-va-text-secondary font-roboto">
+                  Look for "Book Online" or appointment options on the Square site
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 bg-va-primary text-va-neutral-50 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                  2
+                </span>
+                <p className="text-va-text-secondary font-roboto">
+                  Select the service that matches your repair needs
+                </p>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="w-6 h-6 bg-va-primary text-va-neutral-50 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                  3
+                </span>
+                <p className="text-va-text-secondary font-roboto">
+                  Choose your preferred date and time, then provide contact details
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         
         {/* Booking tips */}
-        <div className="mt-6 p-4 bg-va-primary/5 rounded-lg border border-va-primary/20">
-          <h4 className="font-montserrat font-semibold text-va-text-primary mb-2">
-            Booking Tips:
+        <div className="mt-6 p-4 bg-va-accent/5 rounded-lg border border-va-accent/20 text-left">
+          <h4 className="font-montserrat font-semibold text-va-text-primary mb-3">
+            💡 Booking Tips:
           </h4>
-          <ul className="text-sm text-va-text-secondary font-roboto space-y-1">
-            <li>• Select the service that best matches your issue</li>
+          <ul className="text-sm text-va-text-secondary font-roboto space-y-2">
             {quoteData?.device && (
               <li>• Mention you have a <strong>{quoteData.device}</strong> when booking</li>
             )}
@@ -129,9 +100,10 @@ export const SquareBooking: React.FC<SquareBookingProps> = ({ quoteData }) => {
               <li>• Reference your <strong>{quoteData.issue}</strong> issue in the notes</li>
             )}
             {quoteData?.urgency === 'emergency' && (
-              <li>• Select the earliest available time for emergency service</li>
+              <li className="text-orange-700 font-medium">• Select the earliest available time for emergency service</li>
             )}
-            <li>• Have your device make/model ready when you arrive</li>
+            <li>• Have your device make/model ready to mention during booking</li>
+            <li>• Include any error messages you&apos;ve seen in the notes section</li>
           </ul>
         </div>
       </CardContent>

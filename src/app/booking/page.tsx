@@ -50,16 +50,12 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
         )}
 
         {/* Main booking options - responsive layout */}
-        <div className="grid lg:grid-cols-3 gap-8 mb-12">
-          {/* Square Online Booking - Takes up 2 columns on large screens */}
-          <div className="lg:col-span-2">
-            <SquareBooking quoteData={{ device, issue, urgency }} />
-          </div>
+        <div className="space-y-8 mb-12">
+          {/* Square Online Booking - Full width for better mobile experience */}
+          <SquareBooking quoteData={{ device, issue, urgency }} />
           
-          {/* Booking Instructions - Takes up 1 column */}
-          <div className="lg:col-span-1">
-            <BookingInstructions urgency={urgency} />
-          </div>
+          {/* Booking Instructions */}
+          <BookingInstructions urgency={urgency} />
         </div>
 
         {/* Alternative booking methods */}
