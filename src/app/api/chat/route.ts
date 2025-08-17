@@ -1,0 +1,199 @@
+import { NextRequest, NextResponse } from 'next/server';
+import { openrouter, ChatMessage } from '@/lib/openrouter';
+
+// Rate limiting map (in production, use Redis or similar)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
+
+function getRateLimitKey(request: NextRequest): string {
+  const forwarded = request.headers.get('x-forwarded-for');
+  const ip = forwarded ? forwarded.split(',')[0] : request.headers.get('x-real-ip') || 'unknown';
+  return ip;
+}
+
+function isRateLimited(key: string): boolean {
+  const limit = parseInt(process.env.CHAT_RATE_LIMIT || '10');
+  const windowMs = 60 * 1000; // 1 minute
+  
+  const now = Date.now();
+  const userLimit = rateLimitMap.get(key);
+  
+  if (!userLimit || now > userLimit.resetTime) {
+    rateLimitMap.set(key, { count: 1, resetTime: now + windowMs });
+    return false;
+  }
+  
+  if (userLimit.count >= limit) {
+    return true;
+  }
+  
+  userLimit.count++;
+  return false;
+}
+
+function getSystemPrompt(): string {
+  return `You are an AI assistant for VA Computer Guy, a professional computer repair and IT support service in Virginia Beach, VA. You provide helpful, accurate information about computer issues and VA Computer Guy's services.
+
+BUSINESS INFORMATION:
+- Business Name: VA Computer Guy
+- Phone: (757) 375-6764
+- Address: 355 Independence Blvd., Virginia Beach, VA 23462
+- Email: info@vacomputerguy.com
+- Service Area: Hampton Roads area (Virginia Beach, Norfolk, Chesapeake, Portsmouth, Suffolk)
+
+BUSINESS HOURS:
+- Monday: 9:00 AM - 5:00 PM
+- Tuesday: 9:00 AM - 7:00 PM
+- Wednesday: 9:00 AM - 5:00 PM
+- Thursday: 9:00 AM - 7:00 PM
+- Friday: 9:00 AM - 5:00 PM
+- Saturday: 10:00 AM - 4:00 PM
+- Sunday: Closed
+
+SERVICES OFFERED:
+Home Services:
+- PC & Mac Repair ($75-150 typical range)
+- Virus & Malware Removal ($99 flat rate)
+- Data Recovery ($150-300 depending on complexity)
+- In-Home Setup & Support ($85/hour)
+
+Business Services:
+- Managed IT Support (Starting at $99/month)
+- Network & Server Solutions
+- Data Backup & Security
+- Business Consulting
+
+Protection Plans:
+- Residential Protection: $19.99/month (includes priority support, discounted repairs)
+- Business Protection: $99.99/month (includes 24/7 monitoring, priority response)
+
+CONVERSATION GUIDELINES:
+1. Be helpful, professional, and friendly
+2. Provide accurate technical advice for common computer issues
+3. Always direct customers to appropriate services when needed
+4. If outside business hours, mention when they reopen
+5. For urgent issues, provide the phone number for fastest response
+6. For quotes, direct to the quote generator on the website
+7. For repair status, direct to the repair status checker
+8. For booking, direct to the online booking system
+
+QUICK ACTIONS:
+- Use "Check Repair Status" for existing repair inquiries
+- Use "Get Quote" for pricing estimates
+- Use "Book Service" for scheduling appointments
+- Use "Contact Us" for immediate phone contact
+
+Remember: You represent VA Computer Guy's professional image. Be knowledgeable about computer issues but always recommend professional service for complex problems.`;
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    // Check rate limiting
+    const rateLimitKey = getRateLimitKey(request);
+    if (isRateLimited(rateLimitKey)) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait before sending another message.' },
+        { status: 429 }
+      );
+    }
+
+    // Check if OpenRouter is configured
+    if (!openrouter.isConfigured()) {
+      return NextResponse.json(
+        { error: 'Chat service is temporarily unavailable. Please call (757) 375-6764 or email info@vacomputerguy.com for assistance.' },
+        { status: 503 }
+      );
+    }
+
+    const body = await request.json();
+    const { messages, stream = true } = body;
+
+    if (!messages || !Array.isArray(messages)) {
+      return NextResponse.json(
+        { error: 'Invalid messages format' },
+        { status: 400 }
+      );
+    }
+
+    // Add system prompt
+    const systemMessage: ChatMessage = {
+      role: 'system',
+      content: getSystemPrompt(),
+      timestamp: Date.now(),
+    };
+
+    const allMessages = [systemMessage, ...messages];
+
+    // Limit context to prevent token overflow
+    const limitedMessages = allMessages.slice(-10); // Keep last 10 messages plus system
+
+    if (stream) {
+      // Create streaming response
+      const encoder = new TextEncoder();
+      const stream = new ReadableStream({
+        async start(controller) {
+          try {
+            await openrouter.chatStream(
+              limitedMessages,
+              (content: string) => {
+                const chunk = `data: ${JSON.stringify({ content })}\n\n`;
+                controller.enqueue(encoder.encode(chunk));
+              },
+              () => {
+                controller.enqueue(encoder.encode('data: [DONE]\n\n'));
+                controller.close();
+              },
+              (error: Error) => {
+                console.error('Streaming error:', error);
+                const errorChunk = `data: ${JSON.stringify({ 
+                  error: 'Sorry, I encountered an error. Please try again or call (757) 375-6764 for immediate assistance.' 
+                })}\n\n`;
+                controller.enqueue(encoder.encode(errorChunk));
+                controller.close();
+              }
+            );
+          } catch (error) {
+            console.error('Stream setup error:', error);
+            const errorChunk = `data: ${JSON.stringify({ 
+              error: 'Chat service is temporarily unavailable. Please call (757) 375-6764 for assistance.' 
+            })}\n\n`;
+            controller.enqueue(encoder.encode(errorChunk));
+            controller.close();
+          }
+        },
+      });
+
+      return new Response(stream, {
+        headers: {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          'Connection': 'keep-alive',
+        },
+      });
+    } else {
+      // Non-streaming response
+      const response = await openrouter.chat(limitedMessages, {
+        temperature: 0.7,
+        maxTokens: 1000,
+      });
+
+      if ('choices' in response) {
+        return NextResponse.json({
+          message: response.choices[0]?.message?.content || 'No response generated',
+          usage: response.usage,
+        });
+      } else {
+        throw new Error('Unexpected response format');
+      }
+    }
+  } catch (error) {
+    console.error('Chat API error:', error);
+    
+    return NextResponse.json(
+      { 
+        error: 'Sorry, I encountered an error. Please try again or call (757) 375-6764 for immediate assistance.',
+        details: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.message : String(error)) : undefined
+      },
+      { status: 500 }
+    );
+  }
+}
