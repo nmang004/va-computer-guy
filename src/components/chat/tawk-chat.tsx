@@ -46,7 +46,7 @@ interface TawkChatProps {
 
 export default function TawkChat({ 
   propertyId = '68a152478c1f741927d35596', 
-  widgetId = '6a7a165cf7c3e6a8acf46f7fe5ee70d2bc46b36c' 
+  widgetId = '1j2r2ipmk' 
 }: TawkChatProps) {
   useEffect(() => {
     // Initialize Tawk_LoadStart if not already present
