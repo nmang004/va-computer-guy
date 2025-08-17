@@ -1,8 +1,10 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ArrowLeft, Search, BookOpen, Wrench, Shield, CreditCard, UserCircle, MessageCircle, Phone, Mail } from "lucide-react";
+import { ArrowLeft, BookOpen, Wrench, Shield, UserCircle, MessageCircle, Phone, Mail } from "lucide-react";
 import SearchBar from "@/components/support/search-bar";
 
 export default function SupportPage() {
@@ -110,8 +112,8 @@ export default function SupportPage() {
               <Button 
                 onClick={() => {
                   // This will trigger the Tawk.to chat widget
-                  if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                    (window as any).Tawk_API.maximize();
+                  if (typeof window !== 'undefined' && 'Tawk_API' in window) {
+                    (window as { Tawk_API: { maximize: () => void } }).Tawk_API.maximize();
                   }
                 }}
                 className="w-full"
@@ -228,14 +230,14 @@ export default function SupportPage() {
         <div className="text-center">
           <h2 className="text-2xl font-semibold mb-4">Still Need Help?</h2>
           <p className="text-muted-foreground mb-6">
-            Can't find what you're looking for? Our support team is here to help.
+            Can&apos;t find what you&apos;re looking for? Our support team is here to help.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               size="lg"
               onClick={() => {
-                if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                  (window as any).Tawk_API.maximize();
+                if (typeof window !== 'undefined' && 'Tawk_API' in window) {
+                  (window as { Tawk_API: { maximize: () => void } }).Tawk_API.maximize();
                 }
               }}
             >

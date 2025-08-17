@@ -1,15 +1,31 @@
-import { Client, Environment } from 'squareup'
+// TODO: Replace with official Square SDK (squareup is a third-party wrapper)
+// import { Client } from 'squareup'
 import crypto from 'crypto'
 
-// Initialize Square client
-const environment = process.env.NEXT_PUBLIC_SQUARE_ENVIRONMENT === 'production' 
-  ? Environment.Production 
-  : Environment.Sandbox
-
-export const squareClient = new Client({
-  accessToken: process.env.SQUARE_ACCESS_TOKEN!,
-  environment
-})
+// Temporary placeholder for Square client until official SDK is integrated
+/* eslint-disable @typescript-eslint/no-unused-vars */
+export const squareClient = {
+  paymentsApi: {
+    createPayment: (_body: unknown) => Promise.resolve({ result: { payment: { id: 'placeholder-payment-id', status: 'FAILED' }, errors: [{ detail: 'Square integration temporarily disabled' }] } })
+  },
+  subscriptionsApi: {
+    createSubscription: (_body: unknown) => Promise.resolve({ result: { subscription: null, errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    updateSubscription: (_id: string, _body: unknown) => Promise.resolve({ result: { subscription: null, errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    cancelSubscription: (_id: string) => Promise.resolve({ result: { subscription: null, errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    pauseSubscription: (_id: string, _body?: unknown) => Promise.resolve({ result: { subscription: null, errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    resumeSubscription: (_id: string, _body?: unknown) => Promise.resolve({ result: { subscription: null, errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    retrieveSubscription: (_id: string) => Promise.resolve({ result: { subscription: null, errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    searchSubscriptions: (_body: unknown) => Promise.resolve({ result: { subscriptions: [], errors: [{ detail: 'Square integration temporarily disabled' }] } }),
+    listSubscriptionEvents: (_id: string) => Promise.resolve({ result: { subscriptionEvents: [], errors: [{ detail: 'Square integration temporarily disabled' }] } })
+  },
+  customersApi: {
+    createCustomer: (_body: unknown) => Promise.resolve({ result: { customer: null, errors: [{ detail: 'Square integration temporarily disabled' }] } })
+  },
+  catalogApi: {
+    upsertCatalogObject: (_body: unknown) => Promise.resolve({ result: { catalogObject: null, errors: [{ detail: 'Square integration temporarily disabled' }] } })
+  }
+}
+/* eslint-enable @typescript-eslint/no-unused-vars */
 
 // Square API service for subscription management
 export class SquareService {
