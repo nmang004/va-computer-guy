@@ -64,7 +64,7 @@ export const SquareBooking: React.FC<SquareBookingProps> = ({ quoteData }) => {
                   1
                 </span>
                 <p className="text-va-text-secondary font-roboto">
-                  Look for "Book Online" or appointment options on the Square site
+                  Look for &quot;Book Online&quot; or appointment options on the Square site
                 </p>
               </div>
               <div className="flex items-start gap-3">
