@@ -2,7 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ArrowLeft, Phone, CheckCircle } from "lucide-react";
+import Image from "next/image";
+import { ArrowLeft, Phone, CheckCircle, Star } from "lucide-react";
+import { client } from "@/sanity/lib/client";
+import { servicesByCategoryQuery, serviceCategoriesQuery } from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/image";
 
 export default function HomeServicesPage() {
   return (

@@ -101,6 +101,163 @@ export type Database = {
           }
         ]
       }
+      support_tickets: {
+        Row: {
+          id: string
+          customer_id: string | null
+          customer_email: string
+          customer_name: string
+          subject: string
+          description: string
+          status: 'open' | 'in-progress' | 'waiting-customer' | 'resolved' | 'closed'
+          priority: 'low' | 'medium' | 'high' | 'urgent'
+          category: 'technical' | 'billing' | 'general' | 'repair-status' | 'protection-plan'
+          assigned_to: string | null
+          related_repair_ticket: string | null
+          created_at: string
+          updated_at: string
+          closed_at: string | null
+        }
+        Insert: {
+          id?: string
+          customer_id?: string | null
+          customer_email: string
+          customer_name: string
+          subject: string
+          description: string
+          status?: 'open' | 'in-progress' | 'waiting-customer' | 'resolved' | 'closed'
+          priority?: 'low' | 'medium' | 'high' | 'urgent'
+          category?: 'technical' | 'billing' | 'general' | 'repair-status' | 'protection-plan'
+          assigned_to?: string | null
+          related_repair_ticket?: string | null
+          created_at?: string
+          updated_at?: string
+          closed_at?: string | null
+        }
+        Update: {
+          id?: string
+          customer_id?: string | null
+          customer_email?: string
+          customer_name?: string
+          subject?: string
+          description?: string
+          status?: 'open' | 'in-progress' | 'waiting-customer' | 'resolved' | 'closed'
+          priority?: 'low' | 'medium' | 'high' | 'urgent'
+          category?: 'technical' | 'billing' | 'general' | 'repair-status' | 'protection-plan'
+          assigned_to?: string | null
+          related_repair_ticket?: string | null
+          created_at?: string
+          updated_at?: string
+          closed_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_tickets_related_repair_ticket_fkey"
+            columns: ["related_repair_ticket"]
+            isOneToOne: false
+            referencedRelation: "repair_tickets"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      chat_messages: {
+        Row: {
+          id: string
+          support_ticket_id: string
+          sender_type: 'customer' | 'staff' | 'system'
+          sender_name: string
+          sender_email: string | null
+          message: string
+          attachments: Json | null
+          is_internal: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          support_ticket_id: string
+          sender_type: 'customer' | 'staff' | 'system'
+          sender_name: string
+          sender_email?: string | null
+          message: string
+          attachments?: Json | null
+          is_internal?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          support_ticket_id?: string
+          sender_type?: 'customer' | 'staff' | 'system'
+          sender_name?: string
+          sender_email?: string | null
+          message?: string
+          attachments?: Json | null
+          is_internal?: boolean
+          created_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_messages_support_ticket_id_fkey"
+            columns: ["support_ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
+      kb_articles: {
+        Row: {
+          id: string
+          category: string
+          title: string
+          slug: string
+          excerpt: string
+          content: string
+          tags: string[] | null
+          difficulty: 'beginner' | 'intermediate' | 'advanced'
+          read_time: string
+          helpful_count: number
+          not_helpful_count: number
+          view_count: number
+          is_published: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          category: string
+          title: string
+          slug: string
+          excerpt: string
+          content: string
+          tags?: string[] | null
+          difficulty?: 'beginner' | 'intermediate' | 'advanced'
+          read_time?: string
+          helpful_count?: number
+          not_helpful_count?: number
+          view_count?: number
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          category?: string
+          title?: string
+          slug?: string
+          excerpt?: string
+          content?: string
+          tags?: string[] | null
+          difficulty?: 'beginner' | 'intermediate' | 'advanced'
+          read_time?: string
+          helpful_count?: number
+          not_helpful_count?: number
+          view_count?: number
+          is_published?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -110,6 +267,10 @@ export type Database = {
     }
     Enums: {
       repair_status: 'received' | 'diagnosing' | 'awaiting-approval' | 'in-repair' | 'testing' | 'ready-pickup' | 'completed'
+      support_status: 'open' | 'in-progress' | 'waiting-customer' | 'resolved' | 'closed'
+      support_priority: 'low' | 'medium' | 'high' | 'urgent'
+      support_category: 'technical' | 'billing' | 'general' | 'repair-status' | 'protection-plan'
+      article_difficulty: 'beginner' | 'intermediate' | 'advanced'
     }
     CompositeTypes: {
       [_ in never]: never
@@ -124,9 +285,33 @@ export type RepairTicketUpdate = Database['public']['Tables']['repair_tickets'][
 export type StatusTimeline = Database['public']['Tables']['status_timeline']['Row']
 export type StatusTimelineInsert = Database['public']['Tables']['status_timeline']['Insert']
 
-export type RepairStatus = Database['public']['Enums']['repair_status']
+export type SupportTicket = Database['public']['Tables']['support_tickets']['Row']
+export type SupportTicketInsert = Database['public']['Tables']['support_tickets']['Insert']
+export type SupportTicketUpdate = Database['public']['Tables']['support_tickets']['Update']
 
-// Utility type for repair ticket with timeline
+export type ChatMessage = Database['public']['Tables']['chat_messages']['Row']
+export type ChatMessageInsert = Database['public']['Tables']['chat_messages']['Insert']
+export type ChatMessageUpdate = Database['public']['Tables']['chat_messages']['Update']
+
+export type KbArticle = Database['public']['Tables']['kb_articles']['Row']
+export type KbArticleInsert = Database['public']['Tables']['kb_articles']['Insert']
+export type KbArticleUpdate = Database['public']['Tables']['kb_articles']['Update']
+
+export type RepairStatus = Database['public']['Enums']['repair_status']
+export type SupportStatus = Database['public']['Enums']['support_status']
+export type SupportPriority = Database['public']['Enums']['support_priority']
+export type SupportCategory = Database['public']['Enums']['support_category']
+export type ArticleDifficulty = Database['public']['Enums']['article_difficulty']
+
+// Utility types
 export type RepairTicketWithTimeline = RepairTicket & {
   status_timeline: StatusTimeline[]
+}
+
+export type SupportTicketWithMessages = SupportTicket & {
+  chat_messages: ChatMessage[]
+}
+
+export type SupportTicketWithRepair = SupportTicket & {
+  repair_ticket?: RepairTicket
 }
