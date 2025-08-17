@@ -1,7 +1,7 @@
 "use client";
 
 import React from 'react';
-import { CheckCircle, Circle, Clock, User, MessageSquare } from "lucide-react";
+import { CheckCircle, Circle, Clock, User, MessageSquare, ChevronRight } from "lucide-react";
 import type { StatusTimeline, RepairStatus } from "@/lib/supabase/types";
 
 interface RepairTimelineProps {
@@ -103,122 +103,176 @@ export const RepairTimeline: React.FC<RepairTimelineProps> = ({ currentStatus, t
     return timeline.find(entry => entry.status === status);
   };
 
+  const visibleSteps = statusOrder.filter((status, index) => {
+    const timelineEntry = getTimelineEntry(status);
+    const stepStatus = getStepStatus(index);
+    
+    // Always show received, current, and completed steps
+    if (stepStatus === 'completed' || stepStatus === 'current') return true;
+    
+    // Skip awaiting-approval if not in timeline (optional step)
+    if (status === 'awaiting-approval' && !timelineEntry) return false;
+    
+    // Show next immediate step only
+    if (stepStatus === 'pending' && index === getCurrentStatusIndex() + 1) return true;
+    
+    return false;
+  });
+
+  const getProgressPercentage = () => {
+    const currentIndex = getCurrentStatusIndex();
+    const totalSteps = statusOrder.length - 1; // Don't count 'completed' as active step
+    return Math.round((currentIndex / totalSteps) * 100);
+  };
+
   return (
     <div className="space-y-6">
-      {/* Current Status Banner */}
-      <div className={`p-4 rounded-lg border-2 ${
-        currentStatus === 'ready-pickup' || currentStatus === 'completed'
-          ? 'bg-va-accent/10 border-va-accent/30'
-          : 'bg-va-primary/10 border-va-primary/30'
-      }`}>
-        <div className="flex items-center gap-3">
-          {React.createElement(statusConfig[currentStatus].icon, {
-            className: `h-6 w-6 ${statusConfig[currentStatus].color}`
-          })}
+      {/* Progress Overview */}
+      <div className="bg-gradient-to-r from-va-primary/5 to-va-secondary/5 rounded-xl p-6 border border-va-primary/10">
+        <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="font-montserrat font-semibold text-va-text-primary">
-              Current Status: {statusConfig[currentStatus].label}
+            <h3 className="text-lg font-montserrat font-semibold text-va-text-primary">
+              Repair Progress
             </h3>
-            <p className="text-va-text-secondary font-roboto">
-              {statusConfig[currentStatus].description}
+            <p className="text-sm text-va-text-secondary font-roboto">
+              {statusConfig[currentStatus].label} • {getProgressPercentage()}% Complete
             </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className={`px-3 py-1 rounded-full text-xs font-medium ${
+              currentStatus === 'ready-pickup' || currentStatus === 'completed'
+                ? 'bg-va-accent/20 text-va-accent'
+                : 'bg-va-primary/20 text-va-primary'
+            }`}>
+              {currentStatus === 'completed' ? 'COMPLETE' : 'IN PROGRESS'}
+            </div>
+          </div>
+        </div>
+        
+        {/* Progress Bar */}
+        <div className="relative">
+          <div className="w-full bg-va-neutral-200 rounded-full h-2">
+            <div 
+              className="bg-gradient-to-r from-va-primary to-va-secondary h-2 rounded-full transition-all duration-1000 ease-out"
+              style={{ width: `${getProgressPercentage()}%` }}
+            />
           </div>
         </div>
       </div>
 
       {/* Timeline Steps */}
       <div className="relative">
-        {statusOrder.map((status, index) => {
-          const stepStatus = getStepStatus(index);
+        {/* Continuous Background Line */}
+        <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-gradient-to-b from-va-accent via-va-primary to-va-neutral-200 opacity-20" />
+        
+        {visibleSteps.map((status, index) => {
+          const stepStatus = getStepStatus(statusOrder.indexOf(status));
           const timelineEntry = getTimelineEntry(status);
           const config = statusConfig[status];
+          const isLast = index === visibleSteps.length - 1;
           
-          // Skip awaiting-approval if not in timeline (optional step)
-          if (status === 'awaiting-approval' && !timelineEntry && stepStatus === 'pending') {
-            return null;
-          }
-
           return (
-            <div key={status} className="relative flex items-start gap-4 pb-8 last:pb-0">
-              {/* Timeline line */}
-              {index < statusOrder.length - 1 && (
-                <div 
-                  className={`absolute left-4 top-8 w-0.5 h-8 ${
-                    stepStatus === 'completed' ? 'bg-va-accent' : 'bg-va-neutral-200'
-                  }`}
-                />
-              )}
-              
-              {/* Status icon */}
-              <div className={`relative z-10 w-8 h-8 rounded-full flex items-center justify-center ${
-                stepStatus === 'completed' 
-                  ? 'bg-va-accent text-white'
-                  : stepStatus === 'current'
-                  ? `${config.bgColor} text-white`
-                  : 'bg-va-neutral-200 text-va-text-muted'
-              }`}>
-                {stepStatus === 'completed' ? (
-                  <CheckCircle className="h-5 w-5" />
-                ) : stepStatus === 'current' ? (
-                  <Circle className="h-5 w-5 fill-current" />
-                ) : (
-                  <Circle className="h-5 w-5" />
-                )}
-              </div>
+            <div key={status} className={`relative ${!isLast ? 'pb-6' : ''}`}>
+              {/* Step Card */}
+              <div className={`relative ml-2 pl-10 ${
+                stepStatus === 'current' 
+                  ? 'bg-white border-2 border-va-primary/20 shadow-lg shadow-va-primary/10' 
+                  : stepStatus === 'completed'
+                  ? 'bg-va-accent/5 border border-va-accent/20'
+                  : 'bg-va-neutral-50 border border-va-neutral-200'
+              } rounded-lg p-4 transition-all duration-300`}>
+                
+                {/* Status Icon */}
+                <div className={`absolute left-4 top-4 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
+                  stepStatus === 'completed' 
+                    ? 'bg-va-accent text-white transform scale-100' 
+                    : stepStatus === 'current'
+                    ? `${config.bgColor} text-white animate-pulse transform scale-110`
+                    : 'bg-white border-2 border-va-neutral-300 text-va-text-muted'
+                }`}>
+                  {stepStatus === 'completed' ? (
+                    <CheckCircle className="h-6 w-6" />
+                  ) : stepStatus === 'current' ? (
+                    <div className="relative">
+                      <Circle className="h-6 w-6 fill-current" />
+                      <div className="absolute inset-0 rounded-full border-2 border-white animate-ping" />
+                    </div>
+                  ) : (
+                    <Circle className="h-5 w-5" />
+                  )}
+                </div>
 
-              {/* Status content */}
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center justify-between mb-1">
-                  <h4 className={`font-montserrat font-medium ${
-                    stepStatus === 'completed' || stepStatus === 'current'
-                      ? 'text-va-text-primary'
-                      : 'text-va-text-muted'
-                  }`}>
-                    {config.label}
-                  </h4>
-                  {timelineEntry && (
-                    <div className="text-xs text-va-text-muted font-roboto">
-                      <div className="flex items-center gap-1">
+                {/* Content */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <h4 className={`font-montserrat font-semibold ${
+                      stepStatus === 'completed' || stepStatus === 'current'
+                        ? 'text-va-text-primary text-base'
+                        : 'text-va-text-muted'
+                    }`}>
+                      {config.label}
+                      {stepStatus === 'current' && (
+                        <span className="ml-2 inline-flex items-center px-2 py-1 text-xs font-medium bg-va-primary/10 text-va-primary rounded-full">
+                          <div className="w-1.5 h-1.5 bg-va-primary rounded-full mr-1 animate-pulse" />
+                          Active
+                        </span>
+                      )}
+                    </h4>
+                    
+                    {timelineEntry && (
+                      <div className="flex items-center gap-1 text-xs text-va-text-muted bg-va-neutral-100 px-2 py-1 rounded-full">
                         <Clock className="h-3 w-3" />
                         {formatTimestamp(timelineEntry.timestamp).date}
                       </div>
+                    )}
+                  </div>
+                  
+                  <p className={`text-sm font-roboto ${
+                    stepStatus === 'completed' || stepStatus === 'current'
+                      ? 'text-va-text-secondary'
+                      : 'text-va-text-muted'
+                  }`}>
+                    {config.description}
+                  </p>
+
+                  {/* Timeline Details */}
+                  {timelineEntry && (
+                    <div className="space-y-3 pt-2 border-t border-va-neutral-200">
+                      <div className="flex items-center justify-between text-xs">
+                        {timelineEntry.timestamp && (
+                          <span className="text-va-text-muted font-roboto">
+                            {formatTimestamp(timelineEntry.timestamp).time}
+                          </span>
+                        )}
+                        
+                        {timelineEntry.technician_name && (
+                          <div className="flex items-center gap-1 text-va-text-muted">
+                            <User className="h-3 w-3" />
+                            <span>{timelineEntry.technician_name}</span>
+                          </div>
+                        )}
+                      </div>
+                      
+                      {timelineEntry.notes && (
+                        <div className="bg-white border border-va-primary/20 rounded-lg p-3">
+                          <div className="flex items-start gap-2">
+                            <MessageSquare className="h-4 w-4 text-va-primary flex-shrink-0 mt-0.5" />
+                            <p className="text-sm text-va-text-secondary font-roboto leading-relaxed">
+                              {timelineEntry.notes}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-                
-                <p className={`text-sm font-roboto mb-2 ${
-                  stepStatus === 'completed' || stepStatus === 'current'
-                    ? 'text-va-text-secondary'
-                    : 'text-va-text-muted'
-                }`}>
-                  {config.description}
-                </p>
 
-                {timelineEntry && (
-                  <div className="space-y-2">
-                    {timelineEntry.timestamp && (
-                      <div className="text-xs text-va-text-muted font-roboto">
-                        {formatTimestamp(timelineEntry.timestamp).time}
-                      </div>
-                    )}
-                    
-                    {timelineEntry.technician_name && (
-                      <div className="flex items-center gap-1 text-xs text-va-text-muted font-roboto">
-                        <User className="h-3 w-3" />
-                        {timelineEntry.technician_name}
-                      </div>
-                    )}
-                    
-                    {timelineEntry.notes && (
-                      <div className="bg-va-neutral-100 p-3 rounded border-l-4 border-va-primary/30">
-                        <div className="flex items-start gap-2">
-                          <MessageSquare className="h-4 w-4 text-va-primary flex-shrink-0 mt-0.5" />
-                          <p className="text-sm text-va-text-secondary font-roboto">
-                            {timelineEntry.notes}
-                          </p>
-                        </div>
-                      </div>
-                    )}
+                {/* Next Step Indicator */}
+                {stepStatus === 'current' && index < visibleSteps.length - 1 && (
+                  <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-va-primary text-white rounded-full p-1 shadow-lg">
+                      <ChevronRight className="h-3 w-3 transform rotate-90" />
+                    </div>
                   </div>
                 )}
               </div>
