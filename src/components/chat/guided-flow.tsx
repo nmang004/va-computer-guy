@@ -105,10 +105,10 @@ export default function GuidedFlow({ onClose }: GuidedFlowProps) {
   return (
     <div className="flex flex-col h-full max-w-full overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-va-neutral-200 flex-shrink-0">
+      <div className="flex items-center justify-between p-2 md:p-3 border-b border-va-neutral-200 flex-shrink-0">
         <div className="flex items-center gap-2 min-w-0 flex-1">
           {getStepIcon(currentStep.type)}
-          <h3 className="font-semibold text-va-text-primary text-sm truncate">{currentStep.title}</h3>
+          <h3 className="font-semibold text-va-text-primary text-xs md:text-sm truncate">{currentStep.title}</h3>
         </div>
         <div className="flex items-center gap-1 flex-shrink-0">
           {history.length > 0 && (
@@ -135,14 +135,14 @@ export default function GuidedFlow({ onClose }: GuidedFlowProps) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-3 overflow-y-auto min-h-0">
-        <div className={`p-3 rounded-lg border-2 ${getStepColor(currentStep.type)} mb-3`}>
-          <div className="text-va-text-primary text-sm whitespace-pre-line break-words">
+      <div className="flex-1 p-2 md:p-3 overflow-y-auto min-h-0">
+        <div className={`p-2 md:p-3 rounded-lg border-2 ${getStepColor(currentStep.type)} mb-2 md:mb-3`}>
+          <div className="text-va-text-primary text-xs md:text-sm whitespace-pre-line break-words">
             {currentStep.content}
           </div>
           
           {currentStep.serviceRecommendation && (
-            <div className="mt-3 p-2 bg-va-primary/10 rounded-lg border border-va-primary/20">
+            <div className="mt-2 md:mt-3 p-2 bg-va-primary/10 rounded-lg border border-va-primary/20">
               <div className="flex items-start gap-2">
                 <Phone className="w-3 h-3 text-va-primary mt-0.5 flex-shrink-0" />
                 <div className="text-xs text-va-text-primary break-words">
@@ -155,19 +155,19 @@ export default function GuidedFlow({ onClose }: GuidedFlowProps) {
 
         {/* Choices */}
         {currentStep.choices && currentStep.choices.length > 0 && (
-          <div className="space-y-2">
+          <div className="space-y-1.5 md:space-y-2">
             {currentStep.choices.map((choice) => (
               <Button
                 key={choice.id}
                 variant="outline"
-                className="w-full justify-start text-left h-auto p-2 text-sm hover:bg-va-primary/5 hover:border-va-primary break-words"
+                className="w-full justify-start text-left h-auto p-2 md:p-2 text-xs md:text-sm hover:bg-va-primary/5 hover:border-va-primary break-words min-h-[36px] md:min-h-[40px]"
                 onClick={() => handleChoice(choice.nextStep)}
               >
                 <div className="flex items-center gap-2 w-full min-w-0">
                   {choice.nextStep.startsWith('redirect-') && (
                     <ExternalLink className="w-3 h-3 flex-shrink-0" />
                   )}
-                  <span className="break-words text-left">{choice.text}</span>
+                  <span className="break-words text-left leading-tight">{choice.text}</span>
                 </div>
               </Button>
             ))}
@@ -175,7 +175,7 @@ export default function GuidedFlow({ onClose }: GuidedFlowProps) {
         )}
 
         {/* Emergency Contact */}
-        <div className="mt-4 p-3 bg-va-neutral-100 rounded-lg">
+        <div className="mt-3 md:mt-4 p-2 md:p-3 bg-va-neutral-100 rounded-lg">
           <div className="text-center">
             <div className="text-xs text-va-text-muted mb-2">
               Need immediate help?
@@ -184,7 +184,7 @@ export default function GuidedFlow({ onClose }: GuidedFlowProps) {
               variant="outline"
               size="sm"
               onClick={() => window.location.href = 'tel:7573756764'}
-              className="bg-white text-xs px-3 py-1"
+              className="bg-white text-xs px-2 md:px-3 py-1 min-h-[32px]"
             >
               <Phone className="w-3 h-3 mr-1" />
               Call (757) 375-6764
@@ -194,7 +194,7 @@ export default function GuidedFlow({ onClose }: GuidedFlowProps) {
       </div>
 
       {/* Progress indicator */}
-      <div className="px-3 py-2 border-t border-va-neutral-200 bg-va-neutral-50 flex-shrink-0">
+      <div className="px-2 md:px-3 py-1.5 md:py-2 border-t border-va-neutral-200 bg-va-neutral-50 flex-shrink-0">
         <div className="text-xs text-va-text-muted text-center">
           Step {history.length + 1} • {currentStep.type.charAt(0).toUpperCase() + currentStep.type.slice(1)}
         </div>

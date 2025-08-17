@@ -36,12 +36,12 @@ export default function AiChat() {
 
   if (!isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-40 pointer-events-none">
+      <div className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-40 pointer-events-none">
         <Button
           onClick={toggleChat}
-          className="w-14 h-14 rounded-full bg-va-primary hover:bg-va-secondary shadow-lg relative pointer-events-auto"
+          className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-va-primary hover:bg-va-secondary shadow-lg relative pointer-events-auto"
         >
-          <MessageCircle className="w-6 h-6 text-white" />
+          <MessageCircle className="w-5 h-5 md:w-6 md:h-6 text-white" />
           {unreadCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center">
               {unreadCount > 9 ? '9+' : unreadCount}
@@ -60,8 +60,8 @@ export default function AiChat() {
         onClick={closeChat}
       />
       
-      <div className="fixed bottom-6 right-6 z-40 w-80 max-w-[calc(100vw-2rem)] pointer-events-none">
-        <div className="bg-white rounded-lg shadow-2xl border border-va-neutral-200 flex flex-col max-h-[75vh] pointer-events-auto overflow-hidden">
+      <div className="fixed inset-x-2 bottom-2 md:bottom-4 md:right-4 md:left-auto z-40 md:w-80 md:max-w-[calc(100vw-2rem)] pointer-events-none">
+        <div className="bg-white rounded-lg shadow-2xl border border-va-neutral-200 flex flex-col max-h-[90vh] md:max-h-[75vh] pointer-events-auto overflow-hidden">
           {/* Header */}
           <div className="bg-va-primary text-white p-4 rounded-t-lg flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -106,7 +106,7 @@ export default function AiChat() {
           </div>
 
           {!isMinimized && (
-            <div className="flex-1 min-h-[350px] max-h-[55vh] overflow-hidden">
+            <div className="flex-1 min-h-[400px] md:min-h-[350px] max-h-[75vh] md:max-h-[55vh] overflow-hidden">
               <GuidedFlow onClose={closeChat} />
             </div>
           )}
