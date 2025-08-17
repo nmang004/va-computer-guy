@@ -53,7 +53,7 @@ const Header = () => {
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Home Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">Home Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       {homeServices.map((service) => (
@@ -73,7 +73,7 @@ const Header = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger>Business Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">Business Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       {businessServices.map((service) => (
