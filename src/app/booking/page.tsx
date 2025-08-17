@@ -1,8 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { SquareBooking } from "@/components/booking/square-booking";
+import { BookingInstructions } from "@/components/booking/booking-instructions";
+import { ServiceSummary } from "@/components/booking/service-summary";
 import Link from "next/link";
-import { ArrowLeft, Phone, Calendar, MapPin, Clock, CheckCircle } from "lucide-react";
+import { ArrowLeft, Phone, MapPin, Clock } from "lucide-react";
 
 interface BookingPageProps {
   searchParams: Promise<{
@@ -15,35 +18,6 @@ interface BookingPageProps {
 export default async function BookingPage({ searchParams }: BookingPageProps) {
   const { device, issue, urgency } = await searchParams;
   
-  // Display friendly names for the parameters
-  const getDisplayName = (type: string, value: string) => {
-    const mappings = {
-      device: {
-        desktop: 'Desktop PC',
-        laptop: 'Laptop/Notebook', 
-        mac: 'Mac (Desktop/Laptop)',
-        phone: 'Smartphone/Tablet'
-      },
-      issue: {
-        software: 'Software Issues',
-        virus: 'Virus/Malware Removal',
-        hardware: 'Hardware Problems',
-        data: 'Data Recovery'
-      },
-      urgency: {
-        emergency: 'Emergency Service',
-        standard: 'Standard Service', 
-        economy: 'Economy Service'
-      }
-    } as const;
-    
-    type MappingType = keyof typeof mappings;
-    const mapping = mappings[type as MappingType];
-    if (mapping && value in mapping) {
-      return mapping[value as keyof typeof mapping];
-    }
-    return value;
-  };
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
@@ -68,49 +42,27 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
           </p>
         </div>
 
-        {/* Quote Information Display */}
+        {/* Service Summary - Show when coming from quote generator */}
         {(device || issue || urgency) && (
-          <Card className="va-card mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
-                <CheckCircle className="h-5 w-5 text-va-success" />
-                Your Quote Information
-              </CardTitle>
-              <CardDescription className="font-roboto text-va-text-secondary">
-                Based on your previous selections, we&apos;ll prioritize your booking for these services
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-3 md:grid-cols-3">
-                {device && (
-                  <div className="flex items-center gap-2 p-3 bg-va-primary/5 rounded-lg">
-                    <span className="text-sm font-medium text-va-text-secondary font-roboto">Device:</span>
-                    <span className="text-sm font-semibold text-va-text-primary font-montserrat">
-                      {getDisplayName('device', device)}
-                    </span>
-                  </div>
-                )}
-                {issue && (
-                  <div className="flex items-center gap-2 p-3 bg-va-accent/5 rounded-lg">
-                    <span className="text-sm font-medium text-va-text-secondary font-roboto">Issue:</span>
-                    <span className="text-sm font-semibold text-va-text-primary font-montserrat">
-                      {getDisplayName('issue', issue)}
-                    </span>
-                  </div>
-                )}
-                {urgency && (
-                  <div className="flex items-center gap-2 p-3 bg-va-secondary/5 rounded-lg">
-                    <span className="text-sm font-medium text-va-text-secondary font-roboto">Priority:</span>
-                    <span className="text-sm font-semibold text-va-text-primary font-montserrat">
-                      {getDisplayName('urgency', urgency)}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mb-8">
+            <ServiceSummary quoteData={{ device, issue, urgency }} />
+          </div>
         )}
 
+        {/* Main booking options - responsive layout */}
+        <div className="grid lg:grid-cols-3 gap-8 mb-12">
+          {/* Square Online Booking - Takes up 2 columns on large screens */}
+          <div className="lg:col-span-2">
+            <SquareBooking quoteData={{ device, issue, urgency }} />
+          </div>
+          
+          {/* Booking Instructions - Takes up 1 column */}
+          <div className="lg:col-span-1">
+            <BookingInstructions urgency={urgency} />
+          </div>
+        </div>
+
+        {/* Alternative booking methods */}
         <div className="grid md:grid-cols-2 gap-8 mb-12">
           <Card className="va-card">
             <CardHeader>
@@ -155,97 +107,73 @@ export default async function BookingPage({ searchParams }: BookingPageProps) {
           <Card className="va-card">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
-                <Calendar className="h-5 w-5 text-va-primary" />
-                Online Scheduling
+                <MapPin className="h-5 w-5 text-va-primary" />
+                Visit Our Store
               </CardTitle>
               <CardDescription className="font-roboto text-va-text-secondary">
-                Book your appointment 24/7 through our online system
+                Drop off your device at our Virginia Beach location
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-center py-6">
-                <Calendar className="h-16 w-16 mx-auto text-va-text-muted mb-4" />
-                <p className="text-va-text-secondary mb-6 font-roboto">
-                  Online booking system coming soon! For now, please call us to schedule your appointment.
-                </p>
-                <Button variant="outline" asChild className="va-btn-secondary">
-                  <Link href="tel:(757)375-6764">
-                    Call to Schedule
-                  </Link>
-                </Button>
+              <div className="space-y-4">
+                <div className="text-center py-6">
+                  <div className="space-y-2">
+                    <p className="font-semibold font-montserrat text-va-text-primary">355 Independence Blvd.</p>
+                    <p className="text-va-text-secondary font-roboto">Virginia Beach, VA 23462</p>
+                  </div>
+                  <Button size="lg" variant="outline" asChild className="va-btn-secondary mt-4">
+                    <Link href="https://maps.google.com/?q=355+Independence+Blvd,+Virginia+Beach,+VA+23462" target="_blank">
+                      <MapPin className="mr-2 h-4 w-4" />
+                      Get Directions
+                    </Link>
+                  </Button>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-va-primary" />
+                    <span className="font-roboto text-va-text-secondary">Walk-ins welcome</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-va-primary" />
+                    <span className="font-roboto text-va-text-secondary">Free diagnosis on-site</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-va-primary" />
+                    <span className="font-roboto text-va-text-secondary">Same-day service available</span>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="text-center mb-12">
-          <h2 className="text-2xl font-semibold mb-6 font-montserrat text-va-text-primary">Service Options</h2>
-          <div className="grid md:grid-cols-2 gap-6">
-            <Card className="va-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
-                  <MapPin className="h-5 w-5 text-va-primary" />
-                  In-Store Service
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <p className="font-medium font-montserrat text-va-text-primary">355 Independence Blvd.</p>
-                  <p className="text-va-text-secondary font-roboto">Virginia Beach, VA 23462</p>
-                  <p className="text-va-text-secondary font-roboto">Drop off your device for repair</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="va-card">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 font-montserrat text-va-text-primary">
-                  <MapPin className="h-5 w-5 text-va-primary" />
-                  On-Site Service
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2 text-sm">
-                  <p className="font-medium font-montserrat text-va-text-primary">We Come to You</p>
-                  <p className="text-va-text-secondary font-roboto">Virginia Beach & Hampton Roads</p>
-                  <p className="text-va-text-secondary font-roboto">Convenient at-home or office service</p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
+        {/* Additional Service Information */}
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4 font-montserrat text-va-text-primary">What to Expect</h2>
-          <div className="grid md:grid-cols-3 gap-6 text-left">
-            <div>
-              <div className="w-8 h-8 bg-va-primary text-va-neutral-50 rounded-full flex items-center justify-center font-bold mb-3">
-                1
+          <h2 className="text-2xl font-semibold mb-6 font-montserrat text-va-text-primary">
+            We Also Offer On-Site Service
+          </h2>
+          <Card className="va-card max-w-2xl mx-auto">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <MapPin className="h-8 w-8 text-va-primary" />
+                <div className="text-center">
+                  <p className="font-semibold font-montserrat text-va-text-primary">On-Site Repairs Available</p>
+                  <p className="text-sm text-va-text-secondary font-roboto">Virginia Beach & Hampton Roads area</p>
+                </div>
               </div>
-              <h3 className="font-semibold mb-2 font-montserrat text-va-text-primary">Free Diagnosis</h3>
-              <p className="text-sm text-va-text-secondary font-roboto">
-                We&apos;ll assess your device and provide a detailed explanation of the issue and repair options.
+              <p className="text-va-text-secondary font-roboto mb-4">
+                Can&apos;t make it to our store? We offer convenient on-site service for businesses and homes 
+                throughout the Hampton Roads area. Perfect for network setups, multiple device repairs, 
+                and when you can&apos;t transport your equipment.
               </p>
-            </div>
-            <div>
-              <div className="w-8 h-8 bg-va-primary text-va-neutral-50 rounded-full flex items-center justify-center font-bold mb-3">
-                2
-              </div>
-              <h3 className="font-semibold mb-2 font-montserrat text-va-text-primary">Transparent Pricing</h3>
-              <p className="text-sm text-va-text-secondary font-roboto">
-                You&apos;ll receive a clear quote before any work begins. No surprises or hidden fees.
-              </p>
-            </div>
-            <div>
-              <div className="w-8 h-8 bg-va-primary text-va-neutral-50 rounded-full flex items-center justify-center font-bold mb-3">
-                3
-              </div>
-              <h3 className="font-semibold mb-2 font-montserrat text-va-text-primary">Quality Repair</h3>
-              <p className="text-sm text-va-text-secondary font-roboto">
-                Professional repair with genuine parts and a 30-day warranty on all work performed.
-              </p>
-            </div>
-          </div>
+              <Button asChild className="va-btn-primary">
+                <Link href="tel:(757)375-6764">
+                  <Phone className="mr-2 h-4 w-4" />
+                  Call for On-Site Service
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

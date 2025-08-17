@@ -324,23 +324,46 @@ const QuoteResults: React.FC<QuoteStepProps & { onReset: () => void }> = ({
         </ul>
       </div>
       
-      <div className="flex flex-col sm:flex-row gap-4">
-        <Button 
-          asChild 
-          className="va-btn-primary flex-1"
-        >
-          <Link href={`/booking?device=${formData.deviceType}&issue=${formData.issueCategory}&urgency=${formData.urgencyLevel}`}>
-            <Phone className="mr-2 h-4 w-4" />
-            Book Repair Now
-          </Link>
-        </Button>
-        <Button 
-          variant="outline" 
-          onClick={onReset}
-          className="va-btn-secondary"
-        >
-          Start Over
-        </Button>
+      <div className="space-y-4">
+        {/* Primary booking options */}
+        <div className="flex flex-col sm:flex-row gap-4">
+          <Button 
+            asChild 
+            className="va-btn-primary flex-1"
+            size="lg"
+          >
+            <Link href={`/booking?device=${formData.deviceType}&issue=${formData.issueCategory}&urgency=${formData.urgencyLevel}`}>
+              <Phone className="mr-2 h-4 w-4" />
+              Book Online Now
+            </Link>
+          </Button>
+          <Button 
+            asChild
+            className="va-btn-accent flex-1"
+            size="lg"
+          >
+            <Link href="tel:(757)375-6764">
+              <Phone className="mr-2 h-4 w-4" />
+              Call (757) 375-6764
+            </Link>
+          </Button>
+        </div>
+        
+        {/* Secondary options */}
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button 
+            variant="outline" 
+            onClick={onReset}
+            className="va-btn-secondary flex-1"
+          >
+            Start Over
+          </Button>
+          {formData.urgencyLevel === 'emergency' && (
+            <p className="text-xs text-center text-orange-600 font-roboto px-2 py-2">
+              For same-day emergency service, calling directly is recommended
+            </p>
+          )}
+        </div>
       </div>
       
       <div className="flex justify-center">
