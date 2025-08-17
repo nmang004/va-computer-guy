@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
-import { ChatProvider } from "@/lib/chat-context";
 import AiChat from "@/components/chat/ai-chat";
 
 const geistSans = Geist({
@@ -31,14 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        <ChatProvider>
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
-          <AiChat />
-        </ChatProvider>
+        <Header />
+        <main className="flex-1">
+          {children}
+        </main>
+        <Footer />
+        <AiChat />
       </body>
     </html>
   );

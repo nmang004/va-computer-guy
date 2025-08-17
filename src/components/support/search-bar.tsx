@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
 import Fuse, { FuseResult } from 'fuse.js';
-import { useChatContext } from '@/lib/chat-context';
 
 // Define article type
 interface Article {
@@ -69,7 +68,6 @@ export default function SearchBar() {
   const [isOpen, setIsOpen] = useState(false);
   const [fuse, setFuse] = useState<Fuse<Article> | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
-  const { openChat, sendMessage } = useChatContext();
 
   // Initialize Fuse.js
   useEffect(() => {
@@ -203,9 +201,8 @@ export default function SearchBar() {
               variant="outline"
               size="sm"
               onClick={() => {
-                // Open AI chat and send the search query
-                openChat();
-                sendMessage(`I searched for "${query}" but couldn't find what I was looking for. Can you help me with this?`);
+                // Direct to phone contact for support
+                window.location.href = 'tel:7573756764';
                 setIsOpen(false);
               }}
             >
