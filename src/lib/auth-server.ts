@@ -2,8 +2,8 @@ import { createClient as createServerClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { User } from '@supabase/supabase-js'
 
-export interface AuthUser extends User {
-  user_metadata?: {
+export interface AuthUser extends Omit<User, 'user_metadata'> {
+  user_metadata: {
     full_name?: string
     role?: string
     [key: string]: unknown
@@ -49,7 +49,7 @@ export class ServerAuthService {
     const user = await this.getCurrentUser()
     if (!user) return false
     
-    return user.user_metadata?.role === role
+    return user.user_metadata.role === role
   }
 
   // Require admin access

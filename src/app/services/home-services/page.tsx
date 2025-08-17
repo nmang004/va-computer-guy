@@ -6,7 +6,6 @@ import Image from "next/image";
 import { ArrowLeft, Phone, CheckCircle, Star } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { servicesByCategoryQuery, serviceCategoriesQuery } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/image";
 
 interface Service {
   _id: string;
@@ -106,7 +105,7 @@ export default async function HomeServicesPage() {
                   {service.image && (
                     <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                       <Image
-                        src={urlForImage(service.image)?.url() || ''}
+                        src={service.image?.asset?.url || ''}
                         alt={service.image.alt || service.title}
                         fill
                         className="object-cover"

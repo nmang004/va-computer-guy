@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import { QuoteGenerator } from "@/components/home/quote-generator";
 import { client } from "@/sanity/lib/client";
 import { featuredTestimonialsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/image";
 import { 
   Shield, 
   Clock, 
@@ -274,7 +273,7 @@ export default async function HomePage() {
                     <div className="flex items-start gap-4 mb-4">
                       {testimonial.image ? (
                         <Image
-                          src={urlForImage(testimonial.image)?.url() || ''}
+                          src={testimonial.image?.asset?.url || ''}
                           alt={testimonial.image.alt || testimonial.name}
                           width={48}
                           height={48}
@@ -344,7 +343,7 @@ export default async function HomePage() {
                   {post.mainImage && (
                     <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                       <Image
-                        src={urlForImage(post.mainImage)?.url() || ''}
+                        src={post.mainImage?.asset?.url || ''}
                         alt={post.mainImage.alt || post.title}
                         fill
                         className="object-cover"

@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { ArrowLeft, MessageCircle, Clock, User, AlertTriangle, CheckCircle, Users, Wrench, CreditCard, HelpCircle } from "lucide-react";
+import { ArrowLeft, MessageCircle, Clock, AlertTriangle, CheckCircle, Users, HelpCircle } from "lucide-react";
 import SupportDashboard from "@/components/admin/support-dashboard";
 
 export default function AdminSupportPage() {
@@ -103,7 +103,7 @@ export default function AdminSupportPage() {
                   <Badge variant="destructive">2</Badge>
                 </div>
                 <div className="flex items-center justify-between text-sm">
-                  <span>Today's chats</span>
+                  <span>Today&apos;s chats</span>
                   <Badge variant="outline">28</Badge>
                 </div>
               </div>

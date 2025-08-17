@@ -6,7 +6,20 @@ import { ArrowLeft, Clock, Users, ThumbsUp, ThumbsDown, MessageCircle, BookOpen 
 import { notFound } from "next/navigation";
 
 // Article content data
-const articleContent: Record<string, any> = {
+interface ArticleData {
+  title: string;
+  category: string;
+  categoryName: string;
+  readTime: string;
+  difficulty: string;
+  lastUpdated: string;
+  content: string;
+  tags?: string[];
+  helpfulCount?: number;
+  totalViews?: number;
+}
+
+const articleContent: Record<string, ArticleData> = {
   'how-to-book-service': {
     title: 'How to Book a Service Appointment',
     category: 'getting-started',
@@ -427,8 +440,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               <Button 
                 size="sm"
                 onClick={() => {
-                  if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                    (window as any).Tawk_API.maximize();
+                  if (typeof window !== 'undefined' && 'Tawk_API' in window) {
+                    (window as { Tawk_API: { maximize: () => void } }).Tawk_API.maximize();
                   }
                 }}
               >

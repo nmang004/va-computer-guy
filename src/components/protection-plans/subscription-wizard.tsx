@@ -131,10 +131,10 @@ export function SubscriptionWizard({
     loadInitialData()
   }, [])
 
-  const updateWizardData = (section: keyof WizardData, data: Record<string, unknown>) => {
+  const updateWizardData = (section: keyof WizardData, data: unknown) => {
     setWizardData(prev => ({
       ...prev,
-      [section]: { ...prev[section], ...data }
+      [section]: section === 'selectedPlan' ? data : { ...prev[section] as Record<string, unknown>, ...data as Record<string, unknown> }
     }))
   }
 
@@ -264,7 +264,7 @@ export function SubscriptionWizard({
             <div className="text-center">
               <h2 className="text-3xl font-bold mb-2">Account Information</h2>
               <p className="text-muted-foreground">
-                Tell us about yourself and where you're located
+                Tell us about yourself and where you&apos;re located
               </p>
             </div>
 

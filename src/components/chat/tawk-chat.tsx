@@ -4,7 +4,37 @@ import { useEffect } from 'react';
 
 declare global {
   interface Window {
-    Tawk_API?: any;
+    Tawk_API?: {
+      maximize: () => void;
+      minimize: () => void;
+      toggle: () => void;
+      popup: () => void;
+      showWidget: () => void;
+      hideWidget: () => void;
+      setAttributes: (attrs: Record<string, string>) => void;
+      addEvent: (event: string, metadata?: Record<string, unknown>) => void;
+      addTags: (tags: string[]) => void;
+      removeTags: (tags: string[]) => void;
+      onLoad: (callback: () => void) => void;
+      onStatusChange: (callback: (status: string) => void) => void;
+      onChatMaximized: (callback: () => void) => void;
+      onChatMinimized: (callback: () => void) => void;
+      onChatHidden: (callback: () => void) => void;
+      onChatStarted: (callback: () => void) => void;
+      onChatEnded: (callback: () => void) => void;
+      onPrechatSubmit: (callback: (data: Record<string, unknown>) => void) => void;
+      onOfflineSubmit: (callback: (data: Record<string, unknown>) => void) => void;
+      onChatMessageVisitor: (callback: (message: string) => void) => void;
+      onChatMessageAgent: (callback: (message: string) => void) => void;
+      onChatMessageSystem: (callback: (message: string) => void) => void;
+      onAgentJoinChat: (callback: (data: Record<string, unknown>) => void) => void;
+      onAgentLeaveChat: (callback: (data: Record<string, unknown>) => void) => void;
+      onChatSatisfaction: (callback: (satisfaction: string) => void) => void;
+      onVisitorNameChanged: (callback: (visitorName: string) => void) => void;
+      onFileUpload: (callback: (link: string) => void) => void;
+      onTagsUpdated: (callback: (tags: string[]) => void) => void;
+      onUnreadCountChanged: (callback: (unreadCount: number) => void) => void;
+    };
     Tawk_LoadStart?: Date;
   }
 }
@@ -16,12 +46,11 @@ interface TawkChatProps {
 
 export default function TawkChat({ 
   propertyId = '68a152478c1f741927d35596', 
-  widgetId = '1j2r2ipmk' 
+  widgetId = '6a7a165cf7c3e6a8acf46f7fe5ee70d2bc46b36c' 
 }: TawkChatProps) {
   useEffect(() => {
-    // Initialize Tawk_API if not already present
-    if (!window.Tawk_API) {
-      window.Tawk_API = {};
+    // Initialize Tawk_LoadStart if not already present
+    if (!window.Tawk_LoadStart) {
       window.Tawk_LoadStart = new Date();
     }
 
@@ -46,56 +75,58 @@ export default function TawkChat({
     const setupTawkAPI = () => {
       if (window.Tawk_API) {
         // Customize chat widget
-        window.Tawk_API.onLoad = function() {
-          // Set custom visitor name if available
-          const visitorInfo = localStorage.getItem('va-computer-guy-visitor');
-          if (visitorInfo) {
-            const info = JSON.parse(visitorInfo);
-            window.Tawk_API.setAttributes({
-              name: info.name,
-              email: info.email,
-              phone: info.phone
-            }, function(error: any) {
-              if (error) console.log('Error setting visitor attributes:', error);
-            });
-          }
-        };
+        if (window.Tawk_API && window.Tawk_API.onLoad) {
+          window.Tawk_API.onLoad(function() {
+            // Set custom visitor name if available
+            const visitorInfo = localStorage.getItem('va-computer-guy-visitor');
+            if (visitorInfo && window.Tawk_API?.setAttributes) {
+              const info = JSON.parse(visitorInfo);
+              window.Tawk_API.setAttributes({
+                name: info.name,
+                email: info.email,
+                phone: info.phone
+              });
+            }
+          });
+        }
 
         // Add custom action buttons
-        window.Tawk_API.addEvent = function(action: string, metadata?: any) {
+          window.Tawk_API.addEvent = function(action: string, metadata?: Record<string, unknown>) {
           switch(action) {
             case 'check-repair-status':
-              window.Tawk_API.addEvent('Check Repair Status', {
+              window.Tawk_API?.addEvent('Check Repair Status', {
                 action: 'navigation',
                 url: '/repair-status'
               });
               break;
             case 'get-quote':
-              window.Tawk_API.addEvent('Get Quote', {
+              window.Tawk_API?.addEvent('Get Quote', {
                 action: 'navigation', 
                 url: '/#quote-generator'
               });
               break;
             case 'book-service':
-              window.Tawk_API.addEvent('Book Service', {
+              window.Tawk_API?.addEvent('Book Service', {
                 action: 'navigation',
                 url: '/booking'
               });
               break;
             default:
-              window.Tawk_API.addEvent(action, metadata);
+              window.Tawk_API?.addEvent(action, metadata);
           }
         };
 
         // Handle pre-chat form
-        window.Tawk_API.onPrechatSubmit = function(data: any) {
-          // Store visitor info for future reference
-          localStorage.setItem('va-computer-guy-visitor', JSON.stringify({
-            name: data.name,
-            email: data.email,
-            phone: data.phone || ''
-          }));
-        };
+        if (window.Tawk_API.onPrechatSubmit) {
+          window.Tawk_API.onPrechatSubmit(function(data: Record<string, unknown>) {
+            // Store visitor info for future reference
+            localStorage.setItem('va-computer-guy-visitor', JSON.stringify({
+              name: data.name,
+              email: data.email,
+              phone: data.phone || ''
+            }));
+          });
+        }
       }
     };
 
@@ -117,40 +148,40 @@ export const TawkActions = {
   // Show chat widget
   showWidget: () => {
     if (window.Tawk_API) {
-      window.Tawk_API.showWidget();
+      window.Tawk_API?.showWidget();
     }
   },
 
   // Hide chat widget
   hideWidget: () => {
     if (window.Tawk_API) {
-      window.Tawk_API.hideWidget();
+      window.Tawk_API?.hideWidget();
     }
   },
 
   // Maximize chat window
   maximize: () => {
     if (window.Tawk_API) {
-      window.Tawk_API.maximize();
+      window.Tawk_API?.maximize();
     }
   },
 
   // Minimize chat window
   minimize: () => {
     if (window.Tawk_API) {
-      window.Tawk_API.minimize();
+      window.Tawk_API?.minimize();
     }
   },
 
   // Toggle chat window
   toggle: () => {
     if (window.Tawk_API) {
-      window.Tawk_API.toggle();
+      window.Tawk_API?.toggle();
     }
   },
 
   // Send a custom event
-  sendEvent: (eventName: string, metadata?: any) => {
+  sendEvent: (eventName: string, metadata?: Record<string, unknown>) => {
     if (window.Tawk_API && window.Tawk_API.addEvent) {
       window.Tawk_API.addEvent(eventName, metadata);
     }

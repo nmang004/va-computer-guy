@@ -4,7 +4,7 @@ import { SquareService } from '@/lib/square'
 import { ServerAuthService } from '@/lib/auth-server'
 
 // GET /api/subscriptions - Get user's subscriptions
-export async function GET(_request: NextRequest) {
+export async function GET() {
   try {
     const user = await ServerAuthService.getCurrentUser()
     if (!user) {
@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
         amount: BigInt(Math.round(plan.price_monthly * 100)),
         currency: 'USD'
       },
-      customerId: squareCustomer?.id,
+      customerId: squareCustomer ? (squareCustomer as { id?: string })?.id : undefined,
       referenceId: subscription.id,
       note: `${plan.name} - First Payment`
     })

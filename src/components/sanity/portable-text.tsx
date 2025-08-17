@@ -1,6 +1,6 @@
 import { PortableText, PortableTextComponents } from '@portabletext/react'
+import { TypedObject } from '@portabletext/types'
 import Image from 'next/image'
-import { urlForImage } from '@/sanity/lib/image'
 
 const components: PortableTextComponents = {
   types: {
@@ -12,7 +12,7 @@ const components: PortableTextComponents = {
       return (
         <div className="my-8">
           <Image
-            src={urlForImage(value)?.url() || ''}
+            src={(value as { asset?: { url?: string } })?.asset?.url || ''}
             alt={value.alt || 'Blog image'}
             width={800}
             height={400}
@@ -108,7 +108,7 @@ const components: PortableTextComponents = {
 }
 
 interface PortableTextRendererProps {
-  value: any
+  value: TypedObject | TypedObject[]
   className?: string
 }
 

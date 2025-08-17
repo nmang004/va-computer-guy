@@ -5,9 +5,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar, User, ArrowRight } from "lucide-react";
 import { client } from "@/sanity/lib/client";
-import { postQuery, postsQuery } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/image";
+import { postQuery } from "@/sanity/lib/queries";
 import { PortableTextRenderer } from "@/components/sanity/portable-text";
+
 
 interface Post {
   _id: string;
@@ -21,7 +21,7 @@ interface Post {
   publishedAt: string;
   featured: boolean;
   tags?: string[];
-  body: any;
+  body: unknown;
   category?: {
     title: string;
     slug: { current: string };
@@ -45,14 +45,14 @@ interface Post {
 }
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 async function getPost(slug: string): Promise<Post | null> {
   return client.fetch(postQuery, { slug });
 }
 
-async function getRelatedPosts(currentPostId: string, categorySlug?: string): Promise<Post[]> {
+async function getRelatedPosts(currentPostId: string): Promise<Post[]> {
   const query = `
     *[_type == "post" && _id != $currentPostId && defined(slug.current)] | order(publishedAt desc) [0...3] {
       _id,
@@ -107,7 +107,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props) {
-  const post = await getPost(params.slug);
+  const resolvedParams = await params
+  const post = await getPost(resolvedParams.slug);
 
   if (!post) {
     return {
@@ -134,13 +135,14 @@ export async function generateMetadata({ params }: Props) {
 }
 
 export default async function BlogPostPage({ params }: Props) {
-  const post = await getPost(params.slug);
+  const resolvedParams = await params
+  const post = await getPost(resolvedParams.slug);
 
   if (!post) {
     notFound();
   }
 
-  const relatedPosts = await getRelatedPosts(post._id, post.category?.slug.current);
+  const relatedPosts = await getRelatedPosts(post._id);
 
   return (
     <div className="va-container py-8">
@@ -185,7 +187,7 @@ export default async function BlogPostPage({ params }: Props) {
               <div className="flex items-center gap-3">
                 {post.author.image && (
                   <Image
-                    src={urlForImage(post.author.image)?.url() || ''}
+                    src={post.author.image?.asset?.url || ''}
                     alt={post.author.name}
                     width={32}
                     height={32}
@@ -217,7 +219,7 @@ export default async function BlogPostPage({ params }: Props) {
         {post.mainImage && (
           <div className="mb-8">
             <Image
-              src={urlForImage(post.mainImage)?.url() || ''}
+              src={post.mainImage?.asset?.url || ''}
               alt={post.mainImage.alt || post.title}
               width={800}
               height={400}
@@ -233,7 +235,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Article Content */}
         <div className="prose max-w-none">
-          <PortableTextRenderer value={post.body} />
+          <PortableTextRenderer value={post.body as import('@portabletext/types').TypedObject[]} />
         </div>
 
         {/* Author Bio */}
@@ -242,7 +244,7 @@ export default async function BlogPostPage({ params }: Props) {
             <div className="flex items-start gap-4">
               {post.author.image && (
                 <Image
-                  src={urlForImage(post.author.image)?.url() || ''}
+                  src={post.author.image?.asset?.url || ''}
                   alt={post.author.name}
                   width={64}
                   height={64}
@@ -275,7 +277,7 @@ export default async function BlogPostPage({ params }: Props) {
                 {relatedPost.mainImage && (
                   <div className="relative h-32 w-full overflow-hidden rounded mb-4">
                     <Image
-                      src={urlForImage(relatedPost.mainImage)?.url() || ''}
+                      src={relatedPost.mainImage?.asset?.url || ''}
                       alt={relatedPost.mainImage.alt || relatedPost.title}
                       fill
                       className="object-cover"

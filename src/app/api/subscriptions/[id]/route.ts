@@ -6,7 +6,7 @@ import { ServerAuthService } from '@/lib/auth-server'
 // GET /api/subscriptions/[id] - Get specific subscription
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await ServerAuthService.getCurrentUser()
@@ -14,7 +14,8 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const subscription = await DatabaseService.getSubscription(params.id)
+    const resolvedParams = await params
+    const subscription = await DatabaseService.getSubscription(resolvedParams.id)
     if (!subscription) {
       return NextResponse.json({ error: 'Subscription not found' }, { status: 404 })
     }
@@ -39,7 +40,7 @@ export async function GET(
 // PATCH /api/subscriptions/[id] - Update subscription
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await ServerAuthService.getCurrentUser()
@@ -50,7 +51,8 @@ export async function PATCH(
     const body = await request.json()
     const { action, planId } = body
 
-    const subscription = await DatabaseService.getSubscription(params.id)
+    const resolvedParams = await params
+    const subscription = await DatabaseService.getSubscription(resolvedParams.id)
     if (!subscription) {
       return NextResponse.json({ error: 'Subscription not found' }, { status: 404 })
     }
@@ -68,11 +70,11 @@ export async function PATCH(
         if (subscription.square_subscription_id) {
           await SquareService.pauseSubscription(subscription.square_subscription_id)
         }
-        updatedSubscription = await DatabaseService.updateSubscription(params.id, {
+        updatedSubscription = await DatabaseService.updateSubscription(resolvedParams.id, {
           status: 'paused'
         })
         await DatabaseService.createEvent({
-          subscription_id: params.id,
+          subscription_id: resolvedParams.id,
           event_type: 'subscription_paused',
           event_data: { user_id: user.id }
         })
@@ -82,11 +84,11 @@ export async function PATCH(
         if (subscription.square_subscription_id) {
           await SquareService.resumeSubscription(subscription.square_subscription_id)
         }
-        updatedSubscription = await DatabaseService.updateSubscription(params.id, {
+        updatedSubscription = await DatabaseService.updateSubscription(resolvedParams.id, {
           status: 'active'
         })
         await DatabaseService.createEvent({
-          subscription_id: params.id,
+          subscription_id: resolvedParams.id,
           event_type: 'subscription_resumed',
           event_data: { user_id: user.id }
         })
@@ -96,12 +98,12 @@ export async function PATCH(
         if (subscription.square_subscription_id) {
           await SquareService.cancelSubscription(subscription.square_subscription_id)
         }
-        updatedSubscription = await DatabaseService.updateSubscription(params.id, {
+        updatedSubscription = await DatabaseService.updateSubscription(resolvedParams.id, {
           cancel_at_period_end: true,
           canceled_at: new Date().toISOString()
         })
         await DatabaseService.createEvent({
-          subscription_id: params.id,
+          subscription_id: resolvedParams.id,
           event_type: 'subscription_canceled',
           event_data: { user_id: user.id, cancel_at_period_end: true }
         })
@@ -117,11 +119,11 @@ export async function PATCH(
           return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
         }
 
-        updatedSubscription = await DatabaseService.updateSubscription(params.id, {
+        updatedSubscription = await DatabaseService.updateSubscription(resolvedParams.id, {
           plan_id: planId
         })
         await DatabaseService.createEvent({
-          subscription_id: params.id,
+          subscription_id: resolvedParams.id,
           event_type: 'plan_changed',
           event_data: { 
             user_id: user.id, 
@@ -140,7 +142,7 @@ export async function PATCH(
   } catch (error: unknown) {
     console.error('Error updating subscription:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to update subscription' },
+      { error: error instanceof Error ? error.message : 'Failed to update subscription' },
       { status: 500 }
     )
   }
@@ -149,7 +151,7 @@ export async function PATCH(
 // DELETE /api/subscriptions/[id] - Cancel subscription immediately
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const user = await ServerAuthService.getCurrentUser()
@@ -157,7 +159,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const subscription = await DatabaseService.getSubscription(params.id)
+    const resolvedParams = await params
+    const subscription = await DatabaseService.getSubscription(resolvedParams.id)
     if (!subscription) {
       return NextResponse.json({ error: 'Subscription not found' }, { status: 404 })
     }
@@ -174,14 +177,14 @@ export async function DELETE(
     }
 
     // Update subscription status
-    const updatedSubscription = await DatabaseService.updateSubscription(params.id, {
+    const updatedSubscription = await DatabaseService.updateSubscription(resolvedParams.id, {
       status: 'canceled',
       canceled_at: new Date().toISOString()
     })
 
     // Log event
     await DatabaseService.createEvent({
-      subscription_id: params.id,
+      subscription_id: resolvedParams.id,
       event_type: 'subscription_canceled',
       event_data: { 
         user_id: user.id, 
@@ -197,7 +200,7 @@ export async function DELETE(
   } catch (error: unknown) {
     console.error('Error canceling subscription:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to cancel subscription' },
+      { error: error instanceof Error ? error.message : 'Failed to cancel subscription' },
       { status: 500 }
     )
   }

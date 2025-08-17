@@ -6,7 +6,16 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import Link from 'next/link';
-import Fuse from 'fuse.js';
+import Fuse, { FuseResult } from 'fuse.js';
+
+// Define article type
+interface Article {
+  id: string;
+  title: string;
+  category: string;
+  excerpt: string;
+}
+
 
 // Knowledge base articles data
 const articles = [
@@ -55,9 +64,9 @@ const categories = {
 
 export default function SearchBar() {
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<FuseResult<Article>[]>([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [fuse, setFuse] = useState<Fuse<any> | null>(null);
+  const [fuse, setFuse] = useState<Fuse<Article> | null>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   // Initialize Fuse.js
@@ -174,7 +183,7 @@ export default function SearchBar() {
                 }}
                 className="text-sm text-primary hover:underline"
               >
-                View all {results.length} results for "{query}"
+                View all {results.length} results for &quot;{query}&quot;
               </Link>
             </div>
           </CardContent>
@@ -186,19 +195,20 @@ export default function SearchBar() {
         <Card className="absolute top-full left-0 right-0 mt-1 z-50">
           <CardContent className="p-4 text-center">
             <p className="text-sm text-muted-foreground mb-2">
-              No articles found for "{query}"
+              No articles found for &quot;{query}&quot;
             </p>
             <Button
               variant="outline"
               size="sm"
               onClick={() => {
                 // This will trigger the Tawk.to chat widget
-                if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                  (window as any).Tawk_API.maximize();
+                const tawkWindow = window;
+                if (typeof window !== 'undefined' && tawkWindow.Tawk_API) {
+                  tawkWindow.Tawk_API.maximize();
                   // Pre-fill the chat with the search query
                   setTimeout(() => {
-                    if ((window as any).Tawk_API && (window as any).Tawk_API.setAttributes) {
-                      (window as any).Tawk_API.setAttributes({
+                    if (tawkWindow.Tawk_API?.setAttributes) {
+                      tawkWindow.Tawk_API.setAttributes({
                         'Search Query': query
                       });
                     }

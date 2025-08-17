@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,23 +8,18 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { 
   MessageCircle, 
   Clock, 
   User, 
-  Phone, 
   Mail, 
   AlertTriangle, 
   CheckCircle, 
   Search,
-  Filter,
-  MoreHorizontal,
   Eye,
   MessageSquare,
   UserCheck,
-  Calendar,
   Tag,
   Link as LinkIcon
 } from "lucide-react";
@@ -151,9 +146,9 @@ const getCategoryIcon = (category: string) => {
 };
 
 export default function SupportDashboard() {
-  const [tickets, setTickets] = useState(mockTickets);
-  const [chatSessions, setChatSessions] = useState(mockChatSessions);
-  const [selectedTicket, setSelectedTicket] = useState<any>(null);
+  const [tickets] = useState(mockTickets);
+  const [chatSessions] = useState(mockChatSessions);
+  // const [selectedTicket, setSelectedTicket] = useState<Record<string, unknown> | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
@@ -382,7 +377,7 @@ export default function SupportDashboard() {
                         <div className="font-medium">{session.customer_name}</div>
                         <div className="text-sm text-muted-foreground">{session.customer_email}</div>
                         <div className="text-sm text-muted-foreground">
-                          "{session.last_message}"
+                          &quot;{session.last_message}&quot;
                         </div>
                       </div>
                     </div>

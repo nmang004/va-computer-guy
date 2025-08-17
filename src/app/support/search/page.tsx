@@ -75,7 +75,7 @@ function SearchResults({ query }: { query: string }) {
         </div>
         <h3 className="text-lg font-semibold mb-2">No Results Found</h3>
         <p className="text-muted-foreground mb-6">
-          We couldn't find any articles matching "{query}". Try different keywords or browse our categories.
+          We couldn&apos;t find any articles matching &quot;{query}&quot;. Try different keywords or browse our categories.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button asChild>
@@ -86,8 +86,8 @@ function SearchResults({ query }: { query: string }) {
           <Button
             variant="outline"
             onClick={() => {
-              if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                (window as any).Tawk_API.maximize();
+              if (typeof window !== 'undefined' && 'Tawk_API' in window) {
+                (window as { Tawk_API: { maximize: () => void } }).Tawk_API.maximize();
               }
             }}
           >
@@ -103,7 +103,7 @@ function SearchResults({ query }: { query: string }) {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">
-          {filteredResults.length} result{filteredResults.length !== 1 ? 's' : ''} for "{query}"
+          {filteredResults.length} result{filteredResults.length !== 1 ? 's' : ''} for &quot;{query}&quot;
         </h2>
         <div className="text-sm text-muted-foreground">
           Showing {filteredResults.length} of {searchResults.length} articles
@@ -208,13 +208,13 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         <div className="mt-12 text-center">
           <h2 className="text-xl font-semibold mb-4">Still Need Help?</h2>
           <p className="text-muted-foreground mb-6">
-            Can't find what you're looking for? Our support team is here to help.
+            Can&apos;t find what you&apos;re looking for? Our support team is here to help.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => {
-                if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                  (window as any).Tawk_API.maximize();
+                if (typeof window !== 'undefined' && 'Tawk_API' in window) {
+                  (window as { Tawk_API: { maximize: () => void } }).Tawk_API.maximize();
                 }
               }}
             >

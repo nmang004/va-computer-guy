@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
 
-export interface AuthUser extends User {
-  user_metadata?: {
+export interface AuthUser extends Omit<User, 'user_metadata'> {
+  user_metadata: {
     full_name?: string
     role?: string
     [key: string]: unknown
@@ -131,7 +131,7 @@ export type UserRole = typeof USER_ROLES[keyof typeof USER_ROLES]
 export function hasPermission(user: AuthUser | null, requiredRole: UserRole): boolean {
   if (!user) return false
   
-  const userRole = user.user_metadata?.role as UserRole
+  const userRole = user.user_metadata.role as UserRole
   
   // Admin has access to everything
   if (userRole === USER_ROLES.ADMIN) return true

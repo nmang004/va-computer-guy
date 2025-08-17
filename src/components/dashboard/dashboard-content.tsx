@@ -1,13 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AuthUser, AuthService } from '@/lib/auth'
-import { Customer, Subscription } from '@/lib/database'
+import { Customer } from '@/lib/database'
 import { 
   Shield, 
   CreditCard, 
@@ -24,7 +23,6 @@ import {
   Play,
   X,
   ArrowRight,
-  Download,
   Eye
 } from 'lucide-react'
 import Link from 'next/link'
@@ -32,17 +30,24 @@ import Link from 'next/link'
 interface DashboardContentProps {
   user: AuthUser
   customer: Customer | null
-  subscriptions: any[]
-  activeSubscription: any
+  activeSubscription: {
+    id?: string
+    status?: string
+    current_period_start?: string
+    current_period_end?: string
+    plan?: {
+      name?: string
+      price_monthly?: number
+      features?: string[]
+    }
+  } | null
 }
 
 export function DashboardContent({ 
   user, 
   customer, 
-  subscriptions, 
   activeSubscription 
 }: DashboardContentProps) {
-  const router = useRouter()
   const [loading, setLoading] = useState(false)
 
   const handleSignOut = async () => {
@@ -89,14 +94,6 @@ export function DashboardContent({
     }
   }
 
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case 'active': return CheckCircle
-      case 'paused': return Pause
-      case 'canceled': return X
-      default: return AlertCircle
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -147,7 +144,7 @@ export function DashboardContent({
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {activeSubscription 
-                      ? `${activeSubscription.plan?.name} Plan`
+                      ? `${activeSubscription.plan?.name || 'Protection'} Plan`
                       : 'No active protection plan'
                     }
                   </p>
@@ -168,7 +165,7 @@ export function DashboardContent({
                   </div>
                   <p className="text-xs text-muted-foreground">
                     {activeSubscription 
-                      ? `$${activeSubscription.plan?.price_monthly}/month`
+                      ? `$${activeSubscription.plan?.price_monthly || 19.99}/month`
                       : 'No billing scheduled'
                     }
                   </p>
@@ -203,26 +200,26 @@ export function DashboardContent({
                     Your Protection Plan
                   </CardTitle>
                   <CardDescription>
-                    You're currently protected under our {activeSubscription.plan?.name}
+                    You&apos;re currently protected under our {activeSubscription.plan?.name || 'Protection'}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex justify-between items-center">
                     <div>
-                      <h3 className="font-semibold">{activeSubscription.plan?.name}</h3>
+                      <h3 className="font-semibold">{activeSubscription.plan?.name || 'Protection Plan'}</h3>
                       <p className="text-sm text-muted-foreground">
-                        ${activeSubscription.plan?.price_monthly}/month
+                        ${activeSubscription.plan?.price_monthly || 19.99}/month
                       </p>
                     </div>
-                    <Badge className={getStatusColor(activeSubscription.status)}>
-                      {activeSubscription.status.charAt(0).toUpperCase() + activeSubscription.status.slice(1)}
+                    <Badge className={getStatusColor(activeSubscription.status || 'active')}>
+                      {(activeSubscription.status || 'active').charAt(0).toUpperCase() + (activeSubscription.status || 'active').slice(1)}
                     </Badge>
                   </div>
 
                   <div className="space-y-2">
                     <h4 className="font-medium">Included Features:</h4>
                     <div className="grid md:grid-cols-2 gap-2">
-                      {activeSubscription.plan?.features.map((feature: string, index: number) => (
+                      {(activeSubscription.plan?.features || []).map((feature: string, index: number) => (
                         <div key={index} className="flex items-center gap-2 text-sm">
                           <CheckCircle className="h-4 w-4 text-green-500" />
                           <span>{feature}</span>
@@ -258,7 +255,7 @@ export function DashboardContent({
                 <CardContent>
                   <div className="text-center py-8">
                     <p className="text-muted-foreground mb-4">
-                      You don't have an active protection plan. Start protecting your devices now!
+                      You don&apos;t have an active protection plan. Start protecting your devices now!
                     </p>
                     <Button asChild>
                       <Link href="/protection-plans">
@@ -344,8 +341,11 @@ export function DashboardContent({
                             ${activeSubscription.plan?.price_monthly}/month
                           </p>
                         </div>
-                        <Badge className={getStatusColor(activeSubscription.status)}>
-                          {activeSubscription.status.charAt(0).toUpperCase() + activeSubscription.status.slice(1)}
+                        <Badge className={getStatusColor(activeSubscription.status || 'unknown')}>
+                          {activeSubscription.status 
+                            ? activeSubscription.status.charAt(0).toUpperCase() + activeSubscription.status.slice(1)
+                            : 'Unknown'
+                          }
                         </Badge>
                       </div>
 
@@ -379,7 +379,7 @@ export function DashboardContent({
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => handleSubscriptionAction(activeSubscription.id, 'pause')}
+                            onClick={() => activeSubscription.id && handleSubscriptionAction(activeSubscription.id, 'pause')}
                             disabled={loading}
                           >
                             <Pause className="mr-2 h-4 w-4" />
@@ -391,7 +391,7 @@ export function DashboardContent({
                           <Button 
                             variant="outline" 
                             size="sm"
-                            onClick={() => handleSubscriptionAction(activeSubscription.id, 'resume')}
+                            onClick={() => activeSubscription.id && handleSubscriptionAction(activeSubscription.id, 'resume')}
                             disabled={loading}
                           >
                             <Play className="mr-2 h-4 w-4" />
@@ -402,7 +402,7 @@ export function DashboardContent({
                         <Button 
                           variant="outline" 
                           size="sm"
-                          onClick={() => handleSubscriptionAction(activeSubscription.id, 'cancel')}
+                          onClick={() => activeSubscription.id && handleSubscriptionAction(activeSubscription.id, 'cancel')}
                           disabled={loading}
                         >
                           <X className="mr-2 h-4 w-4" />
@@ -421,7 +421,7 @@ export function DashboardContent({
                     <div>
                       <h4 className="font-medium mb-3">Plan Features</h4>
                       <div className="grid md:grid-cols-2 gap-2">
-                        {activeSubscription.plan?.features.map((feature: string, index: number) => (
+                        {((activeSubscription.plan as { features?: string[] })?.features || []).map((feature: string, index: number) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
                             <CheckCircle className="h-4 w-4 text-green-500" />
                             <span>{feature}</span>
@@ -532,7 +532,7 @@ export function DashboardContent({
   )
 }
 
-function Label({ children, className, ...props }: any) {
+function Label({ children, className, ...props }: { children: React.ReactNode; className?: string; [key: string]: unknown }) {
   return (
     <label className={`text-sm font-medium ${className}`} {...props}>
       {children}

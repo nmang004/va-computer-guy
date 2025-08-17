@@ -72,19 +72,19 @@ export function AuthForm({ mode, onSuccess, redirectTo = '/dashboard' }: AuthFor
           router.push(redirectTo)
         }
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Auth error:', err)
       
       // Map Supabase errors to user-friendly messages
-      let errorMessage = err.message
+      let errorMessage = err instanceof Error ? err.message : 'An unexpected error occurred'
       
-      if (err.message?.includes('Invalid login credentials')) {
+      if (err instanceof Error && err.message?.includes('Invalid login credentials')) {
         errorMessage = AUTH_ERRORS.INVALID_CREDENTIALS
-      } else if (err.message?.includes('User already registered')) {
+      } else if (err instanceof Error && err.message?.includes('User already registered')) {
         errorMessage = AUTH_ERRORS.EMAIL_ALREADY_EXISTS
-      } else if (err.message?.includes('Password should be at least')) {
+      } else if (err instanceof Error && err.message?.includes('Password should be at least')) {
         errorMessage = AUTH_ERRORS.WEAK_PASSWORD
-      } else if (err.message?.includes('Unable to validate email address')) {
+      } else if (err instanceof Error && err.message?.includes('Unable to validate email address')) {
         errorMessage = AUTH_ERRORS.INVALID_EMAIL
       }
       
@@ -216,7 +216,7 @@ export function AuthForm({ mode, onSuccess, redirectTo = '/dashboard' }: AuthFor
               </>
             ) : (
               <>
-                Don't have an account?{' '}
+                Don&apos;t have an account?{' '}
                 <Link href="/auth/signup" className="text-primary hover:underline">
                   Sign up
                 </Link>

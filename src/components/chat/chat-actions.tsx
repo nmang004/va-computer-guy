@@ -3,7 +3,11 @@
 import { Button } from "@/components/ui/button";
 import { MessageCircle, Search, Calendar, Wrench } from "lucide-react";
 import Link from "next/link";
-import { TawkActions } from "./tawk-chat";
+// Import types for Tawk.to chat window
+interface TawkAPI {
+  maximize: () => void;
+  setAttributes: (attrs: Record<string, string>) => void;
+}
 
 interface ChatActionsProps {
   className?: string;
@@ -13,13 +17,14 @@ interface ChatActionsProps {
 export default function ChatActions({ className = '', variant = 'inline' }: ChatActionsProps) {
   const openChatWithAction = (action: string) => {
     // Pre-fill chat with specific action context
-    if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-      (window as any).Tawk_API.maximize();
+    const tawkAPI = (window as { Tawk_API?: TawkAPI }).Tawk_API;
+    if (typeof window !== 'undefined' && tawkAPI) {
+      tawkAPI.maximize();
       
       // Set custom attributes for the chat session
       setTimeout(() => {
-        if ((window as any).Tawk_API && (window as any).Tawk_API.setAttributes) {
-          (window as any).Tawk_API.setAttributes({
+        if (tawkAPI?.setAttributes) {
+          tawkAPI.setAttributes({
             'Quick Action': action,
             'Page': window.location.pathname
           });
@@ -143,18 +148,19 @@ export function QuickChatButton({
   action: string;
   children: React.ReactNode;
   className?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }) {
   return (
     <Button
       className={className}
       onClick={() => {
-        if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-          (window as any).Tawk_API.maximize();
+        const tawkAPI = (window as { Tawk_API?: TawkAPI }).Tawk_API;
+        if (typeof window !== 'undefined' && tawkAPI) {
+          tawkAPI.maximize();
           
           setTimeout(() => {
-            if ((window as any).Tawk_API && (window as any).Tawk_API.setAttributes) {
-              (window as any).Tawk_API.setAttributes({
+            if (tawkAPI?.setAttributes) {
+              tawkAPI.setAttributes({
                 'Quick Action': action,
                 'Page': window.location.pathname
               });

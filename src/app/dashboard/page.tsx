@@ -12,14 +12,12 @@ export default async function DashboardPage() {
 
   // Get customer data
   let customer = null
-  let subscriptions = []
   let activeSubscription = null
 
   try {
     customer = await DatabaseService.getCustomerByUserId(user.id)
     
     if (customer) {
-      subscriptions = await DatabaseService.getCustomerSubscriptions(customer.id)
       activeSubscription = await DatabaseService.getActiveSubscription(customer.id)
     }
   } catch (error) {
@@ -30,7 +28,6 @@ export default async function DashboardPage() {
     <DashboardContent 
       user={user}
       customer={customer}
-      subscriptions={subscriptions}
       activeSubscription={activeSubscription}
     />
   )

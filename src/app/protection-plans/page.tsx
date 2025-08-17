@@ -48,7 +48,7 @@ export default function ProtectionPlansPage() {
     setShowWizard(true)
   }
 
-  const handleWizardComplete = (_subscriptionId: string) => {
+  const handleWizardComplete = () => {
     // Redirect to dashboard after successful subscription
     router.push('/dashboard')
   }
@@ -72,7 +72,7 @@ export default function ProtectionPlansPage() {
   if (showWizard) {
     return (
       <SubscriptionWizard
-        initialPlan={selectedPlan}
+        initialPlan={selectedPlan || undefined}
         onComplete={handleWizardComplete}
         onCancel={handleWizardCancel}
       />

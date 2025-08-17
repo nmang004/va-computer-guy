@@ -372,13 +372,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <div className="mt-12 text-center">
           <h2 className="text-xl font-semibold mb-4">Need More Help?</h2>
           <p className="text-muted-foreground mb-6">
-            Can't find what you're looking for? Our support team is here to help.
+            Can&apos;t find what you&apos;re looking for? Our support team is here to help.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={() => {
-                if (typeof window !== 'undefined' && (window as any).Tawk_API) {
-                  (window as any).Tawk_API.maximize();
+                if (typeof window !== 'undefined' && 'Tawk_API' in window) {
+                  (window as { Tawk_API: { maximize: () => void } }).Tawk_API.maximize();
                 }
               }}
             >

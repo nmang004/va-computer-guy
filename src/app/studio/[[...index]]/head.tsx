@@ -1,4 +1,4 @@
-export { metadata } from 'next-sanity/studio/head'
+// export { metadata } from 'next-sanity/studio/head'
 
 export default function Head() {
   return (

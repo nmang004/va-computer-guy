@@ -2,6 +2,35 @@ import { NextRequest, NextResponse } from 'next/server'
 import { DatabaseService } from '@/lib/database'
 import { SquareService } from '@/lib/square'
 
+// Define webhook event types (currently unused but kept for future reference)
+// interface WebhookEvent {
+//   type: string
+//   data: {
+//     type: string
+//     id: string
+//     object: Record<string, unknown>
+//   }
+// }
+
+interface SquarePayment {
+  id: string
+  reference_id?: string
+  status?: string
+  amount_money?: {
+    amount: number
+    currency: string
+  }
+  delay_action?: {
+    type: string
+  }
+}
+
+interface SquareSubscription {
+  id: string
+  status?: string
+  invoice_request_date?: string
+}
+
 // POST /api/webhooks/square - Handle Square webhook events
 export async function POST(request: NextRequest) {
   try {
@@ -55,7 +84,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-async function handlePaymentCreated(payment: any) {
+async function handlePaymentCreated(payment: SquarePayment) {
   try {
     console.log('Processing payment created:', payment.id)
 
@@ -68,8 +97,8 @@ async function handlePaymentCreated(payment: any) {
         await DatabaseService.createPayment({
           subscription_id: subscription.id,
           square_payment_id: payment.id,
-          amount: Number(payment.amount_money.amount) / 100, // Convert from cents
-          currency: payment.amount_money.currency,
+          amount: payment.amount_money ? Number(payment.amount_money.amount) / 100 : 0,
+          currency: payment.amount_money?.currency || 'USD',
           status: payment.status === 'COMPLETED' ? 'completed' : 'pending',
           payment_date: new Date().toISOString()
         })
@@ -80,7 +109,7 @@ async function handlePaymentCreated(payment: any) {
           event_type: 'payment_created',
           event_data: {
             payment_id: payment.id,
-            amount: Number(payment.amount_money.amount) / 100,
+            amount: payment.amount_money ? Number(payment.amount_money.amount) / 100 : 0,
             status: payment.status
           }
         })
@@ -91,7 +120,7 @@ async function handlePaymentCreated(payment: any) {
   }
 }
 
-async function handlePaymentUpdated(payment: any) {
+async function handlePaymentUpdated(payment: SquarePayment) {
   try {
     console.log('Processing payment updated:', payment.id)
 
@@ -112,7 +141,7 @@ async function handlePaymentUpdated(payment: any) {
         event_type: payment.status === 'COMPLETED' ? 'payment_succeeded' : 'payment_failed',
         event_data: {
           payment_id: payment.id,
-          amount: Number(payment.amount_money.amount) / 100,
+          amount: payment.amount_money ? Number(payment.amount_money.amount) / 100 : 0,
           status: payment.status
         }
       })
@@ -127,7 +156,7 @@ async function handlePaymentUpdated(payment: any) {
   }
 }
 
-async function handleSubscriptionCreated(subscription: any) {
+async function handleSubscriptionCreated(subscription: SquareSubscription) {
   try {
     console.log('Processing subscription created:', subscription.id)
 
@@ -142,7 +171,7 @@ async function handleSubscriptionCreated(subscription: any) {
   }
 }
 
-async function handleSubscriptionUpdated(subscription: any) {
+async function handleSubscriptionUpdated(subscription: SquareSubscription) {
   try {
     console.log('Processing subscription updated:', subscription.id)
 
@@ -156,7 +185,7 @@ async function handleSubscriptionUpdated(subscription: any) {
   }
 }
 
-async function handleInvoicePaymentMade(invoice: any) {
+async function handleInvoicePaymentMade(invoice: Record<string, unknown>) {
   try {
     console.log('Processing invoice payment made:', invoice.id)
     
@@ -170,7 +199,7 @@ async function handleInvoicePaymentMade(invoice: any) {
   }
 }
 
-async function handleInvoiceFailed(invoice: any) {
+async function handleInvoiceFailed(invoice: Record<string, unknown>) {
   try {
     console.log('Processing invoice failed:', invoice.id)
     
@@ -185,7 +214,7 @@ async function handleInvoiceFailed(invoice: any) {
   }
 }
 
-async function handleFailedPayment(subscriptionId: string, payment: any) {
+async function handleFailedPayment(subscriptionId: string, payment: SquarePayment) {
   try {
     // Get subscription details
     const subscription = await DatabaseService.getSubscription(subscriptionId)
@@ -197,7 +226,7 @@ async function handleFailedPayment(subscriptionId: string, payment: any) {
       event_type: 'payment_failed',
       event_data: {
         payment_id: payment.id,
-        amount: Number(payment.amount_money.amount) / 100,
+        amount: payment.amount_money ? Number(payment.amount_money.amount) / 100 : 0,
         failure_reason: payment.delay_action?.type || 'Unknown'
       }
     })

@@ -8,16 +8,43 @@ import { Input } from '@/components/ui/input'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CreditCard, Shield, Lock } from 'lucide-react'
 
+// Define Square types
+interface SquareCard {
+  addEventListener: (event: string, callback: (event: SquareEvent) => void) => void;
+  tokenize: () => Promise<{ token?: string; status: string; errors?: unknown[] }>;
+  attach: (element: HTMLElement | null) => Promise<void>;
+  destroy: () => void;
+}
+
+interface SquarePayments {
+  card: (options?: unknown) => Promise<SquareCard>;
+}
+
+interface SquareEvent {
+  eventType: string;
+  [key: string]: unknown;
+}
+
+interface PaymentResult {
+  token?: string;
+  status: string;
+  errors?: unknown[];
+  paymentRequest?: unknown;
+  billingAddress?: unknown;
+}
+
 declare global {
   interface Window {
-    Square?: any
+    Square?: {
+      payments: (appId: string, locationId: string) => SquarePayments;
+    };
   }
 }
 
 interface SquarePaymentFormProps {
   amount: number
-  onPaymentSuccess: (result: any) => void
-  onPaymentError: (error: any) => void
+  onPaymentSuccess: (result: PaymentResult) => void
+  onPaymentError: (error: unknown) => void
   loading?: boolean
   disabled?: boolean
 }
@@ -38,8 +65,8 @@ export function SquarePaymentForm({
   disabled = false
 }: SquarePaymentFormProps) {
   const cardContainerRef = useRef<HTMLDivElement>(null)
-  const [payments, setPayments] = useState<any>(null)
-  const [card, setCard] = useState<any>(null)
+  const [payments, setPayments] = useState<SquarePayments | null>(null)
+  const [card, setCard] = useState<SquareCard | null>(null)
   const [isSquareLoaded, setIsSquareLoaded] = useState(false)
   const [cardComplete, setCardComplete] = useState(false)
   const [billingAddress, setBillingAddress] = useState<BillingAddress>({
@@ -53,6 +80,58 @@ export function SquarePaymentForm({
 
   // Load Square Web Payments SDK
   useEffect(() => {
+    const initializeSquare = async () => {
+      if (!window.Square) {
+        console.error('Square SDK not loaded')
+        return
+      }
+
+      try {
+        const payments = window.Square.payments(
+          process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID || '',
+          process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID || ''
+        )
+        setPayments(payments)
+
+        const cardOptions = {
+          style: {
+            '.input-container': {
+              borderColor: '#e2e8f0',
+              borderRadius: '6px'
+            },
+            '.input-container.is-focus': {
+              borderColor: '#3b82f6'
+            },
+            '.input-container.is-error': {
+              borderColor: '#ef4444'
+            }
+          }
+        }
+
+        const newCard = await payments.card(cardOptions)
+        await newCard.attach(cardContainerRef.current)
+        
+        newCard.addEventListener('cardBrandChanged', (event: SquareEvent) => {
+          console.log('Card brand changed:', event)
+        })
+        
+        newCard.addEventListener('errorClassAdded', (event: SquareEvent) => {
+          console.log('Card error:', event)
+          setCardComplete(false)
+        })
+        
+        newCard.addEventListener('errorClassRemoved', (event: SquareEvent) => {
+          console.log('Card error cleared:', event)
+          setCardComplete(true)
+        })
+
+        setCard(newCard)
+      } catch (error) {
+        console.error('Failed to initialize Square card:', error)
+        onPaymentError(error)
+      }
+    }
+
     const loadSquareSDK = async () => {
       if (window.Square) {
         initializeSquare()
@@ -76,71 +155,13 @@ export function SquarePaymentForm({
     return () => {
       // Cleanup
       if (card) {
-        card.destroy()
-      }
-    }
-  }, [])
-
-  const initializeSquare = async () => {
-    if (!window.Square) {
-      console.error('Square SDK not loaded')
-      return
-    }
-
-    try {
-      const payments = window.Square.payments(
-        process.env.NEXT_PUBLIC_SQUARE_APPLICATION_ID,
-        process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID
-      )
-      setPayments(payments)
-
-      const cardOptions = {
-        style: {
-          '.input-container': {
-            borderColor: '#e5e7eb',
-            borderRadius: '8px'
-          },
-          '.input-container.is-focus': {
-            borderColor: '#3b82f6'
-          },
-          '.input-container.is-error': {
-            borderColor: '#ef4444'
-          },
-          '.message-text': {
-            color: '#6b7280'
-          },
-          '.message-text.is-error': {
-            color: '#ef4444'
-          }
+        // Check if destroy method exists before calling
+        if (typeof card.destroy === 'function') {
+          card.destroy()
         }
       }
-
-      const cardElement = await payments.card(cardOptions)
-      await cardElement.attach(cardContainerRef.current)
-      setCard(cardElement)
-
-      // Listen for card events
-      cardElement.addEventListener('cardBrandChanged', (event: any) => {
-        console.log('Card brand changed:', event.detail)
-      })
-
-      cardElement.addEventListener('errorClassAdded', (event: any) => {
-        console.log('Card error:', event.detail)
-      })
-
-      cardElement.addEventListener('cardComplete', (event: any) => {
-        setCardComplete(true)
-      })
-
-      cardElement.addEventListener('cardIncomplete', (event: any) => {
-        setCardComplete(false)
-      })
-
-    } catch (error) {
-      console.error('Error initializing Square:', error)
-      onPaymentError(error)
     }
-  }
+  }, [card, onPaymentError])
 
   const handlePayment = async () => {
     if (!card || !payments) {
@@ -172,11 +193,12 @@ export function SquarePaymentForm({
 
         onPaymentSuccess({
           token: result.token,
+          status: result.status,
           paymentRequest,
           billingAddress: useServiceAddress ? null : billingAddress
         })
       } else {
-        onPaymentError(new Error(result.errors?.[0]?.message || 'Payment tokenization failed'))
+        onPaymentError(new Error('Payment tokenization failed'))
       }
     } catch (error) {
       console.error('Payment error:', error)
@@ -358,8 +380,8 @@ export function SquarePaymentForm({
 // Wrapper component for easier integration
 interface PaymentFormWrapperProps {
   planPrice: number
-  onSuccess: (paymentData: any) => void
-  onError: (error: any) => void
+  onSuccess: (paymentData: PaymentResult) => void
+  onError: (error: unknown) => void
   loading?: boolean
 }
 

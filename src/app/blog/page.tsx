@@ -6,7 +6,6 @@ import Image from "next/image";
 import { ArrowLeft, BookOpen, ArrowRight, Calendar, User } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { postsQuery, categoriesQuery } from "@/sanity/lib/queries";
-import { urlForImage } from "@/sanity/lib/image";
 
 interface Post {
   _id: string;
@@ -184,7 +183,7 @@ export default async function BlogPage() {
                   {post.mainImage && (
                     <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
                       <Image
-                        src={urlForImage(post.mainImage)?.url() || ''}
+                        src={post.mainImage?.asset?.url || ''}
                         alt={post.mainImage.alt || post.title}
                         fill
                         className="object-cover"
