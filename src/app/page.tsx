@@ -215,7 +215,7 @@ export default async function HomePage() {
       <section className="py-16 bg-va-neutral-50">
         <div className="va-container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-montserrat font-bold mb-4 text-va-text-primary">Why Choose VA Computer Guy?</h2>
+            <h2 className="text-3xl font-montserrat font-bold mb-4 text-va-text-primary">Why Choose Computer Guy?</h2>
             <p className="text-lg text-va-text-secondary max-w-2xl mx-auto font-roboto">
               With over a decade of experience, we&apos;ve built our reputation on trust, 
               expertise, and exceptional customer service.

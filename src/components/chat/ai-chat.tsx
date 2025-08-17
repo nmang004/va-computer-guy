@@ -108,7 +108,7 @@ export default function AiChat() {
               <MessageCircle className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="font-semibold text-sm">VA Computer Guy</h3>
+              <h3 className="font-semibold text-sm">Computer Guy</h3>
               <div className="flex items-center gap-1 text-xs opacity-90">
                 {state.isConnected ? (
                   businessHours ? (
@@ -158,7 +158,7 @@ export default function AiChat() {
               {state.messages.length === 0 ? (
                 <div className="text-center space-y-4">
                   <div className="text-va-text-muted text-sm mb-4">
-                    Hi! I&apos;m here to help with your computer questions and VA Computer Guy services.
+                    Hi! I&apos;m here to help with your computer questions and Computer Guy services.
                   </div>
                   
                   <div className="space-y-2">

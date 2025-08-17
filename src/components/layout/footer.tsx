@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail, MapPin, Clock, Facebook, Twitter, Instagram } from "lucide-react";
 
@@ -10,11 +11,14 @@ const Footer = () => {
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="h-8 w-8 bg-va-primary rounded flex items-center justify-center">
-                <span className="text-va-neutral-50 font-montserrat font-bold text-sm">VA</span>
-              </div>
-              <span className="font-montserrat font-bold text-xl text-va-text-primary">Computer Guy</span>
+            <Link href="/" className="flex items-center">
+              <Image
+                src="/images/computer-guy-logo.png"
+                alt="Computer Guy - Helping Good People With Bad Computers"
+                width={180}
+                height={45}
+                className="h-8 w-auto"
+              />
             </Link>
             <p className="text-sm text-va-text-secondary font-roboto">
               Your trusted local computer repair and IT support specialists serving Virginia Beach and Hampton Roads area since 2010.
@@ -122,7 +126,7 @@ const Footer = () => {
         <div className="border-t border-va-neutral-200 py-6">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-sm text-va-text-muted font-roboto">
-              © 2025 VA Computer Guy. All rights reserved.
+              © 2025 Computer Guy. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link href="/privacy" className="text-sm text-va-text-secondary hover:text-va-primary transition-colors font-roboto">

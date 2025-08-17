@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VA Computer Guy | Computer Repair & IT Support Virginia Beach",
+  title: "Computer Guy | Computer Repair & IT Support Virginia Beach",
   description: "Professional computer repair and IT support services in Virginia Beach and Hampton Roads. Fast, reliable solutions for home and business. Call (757) 375-6764.",
 };
 

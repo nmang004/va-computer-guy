@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
@@ -36,11 +37,15 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="h-8 w-8 bg-va-primary rounded flex items-center justify-center">
-              <span className="text-va-neutral-50 font-montserrat font-bold text-sm">VA</span>
-            </div>
-            <span className="font-montserrat font-bold text-xl text-va-text-primary">Computer Guy</span>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/images/computer-guy-logo.png"
+              alt="Computer Guy - Helping Good People With Bad Computers"
+              width={200}
+              height={50}
+              className="h-10 w-auto"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -145,13 +150,16 @@ const Header = () => {
               <nav className="flex flex-col space-y-4">
                 <Link
                   href="/"
-                  className="flex items-center space-x-2 pb-4 border-b"
+                  className="flex items-center pb-4 border-b"
                   onClick={() => setIsOpen(false)}
                 >
-                  <div className="h-8 w-8 bg-va-primary rounded flex items-center justify-center">
-                    <span className="text-va-neutral-50 font-montserrat font-bold text-sm">VA</span>
-                  </div>
-                  <span className="font-montserrat font-bold text-xl text-va-text-primary">Computer Guy</span>
+                  <Image
+                    src="/images/computer-guy-logo.png"
+                    alt="Computer Guy - Helping Good People With Bad Computers"
+                    width={180}
+                    height={45}
+                    className="h-8 w-auto"
+                  />
                 </Link>
 
                 <div className="space-y-4">

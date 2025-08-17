@@ -32,7 +32,7 @@ export default function AboutPage() {
             </CardHeader>
             <CardContent>
               <p className="text-va-text-secondary font-roboto mb-4">
-                VA Computer Guy was founded in 2010 with a simple mission: to provide honest, reliable, and 
+                Computer Guy was founded in 2010 with a simple mission: to provide honest, reliable, and 
                 professional computer repair services to our local community. What started as a small operation 
                 has grown into the most trusted technology service provider in the Virginia Beach and Hampton Roads area.
               </p>
@@ -80,7 +80,7 @@ export default function AboutPage() {
 
           <Card className="va-card">
             <CardHeader>
-              <CardTitle className="font-montserrat text-va-text-primary">Why Choose VA Computer Guy?</CardTitle>
+              <CardTitle className="font-montserrat text-va-text-primary">Why Choose Computer Guy?</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-3 gap-6">
@@ -141,7 +141,7 @@ export default function AboutPage() {
         <div className="text-center">
           <h2 className="text-2xl font-montserrat font-semibold mb-4 text-va-text-primary">Ready to Experience the Difference?</h2>
           <p className="text-va-text-secondary font-roboto mb-6">
-            Join thousands of satisfied customers who trust VA Computer Guy with their technology needs
+            Join thousands of satisfied customers who trust Computer Guy with their technology needs
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" asChild className="va-btn-primary">
