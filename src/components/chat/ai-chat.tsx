@@ -151,7 +151,7 @@ export default function AiChat() {
               {state.messages.length === 0 ? (
                 <div className="text-center space-y-4">
                   <div className="text-va-text-muted text-sm mb-4">
-                    👋 Hi! I&apos;m here to help with your computer questions and VA Computer Guy services.
+                    Hi! I&apos;m here to help with your computer questions and VA Computer Guy services.
                   </div>
                   
                   <div className="space-y-2">
