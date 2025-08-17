@@ -137,7 +137,7 @@ export async function PATCH(
 
     return NextResponse.json({ subscription: updatedSubscription })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error updating subscription:', error)
     return NextResponse.json(
       { error: error.message || 'Failed to update subscription' },
@@ -194,7 +194,7 @@ export async function DELETE(
       subscription: updatedSubscription 
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error canceling subscription:', error)
     return NextResponse.json(
       { error: error.message || 'Failed to cancel subscription' },

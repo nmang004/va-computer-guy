@@ -7,7 +7,7 @@ import { PricingTable } from '@/components/protection-plans/pricing-table'
 import { SubscriptionWizard } from '@/components/protection-plans/subscription-wizard'
 import { SubscriptionPlan } from '@/lib/database'
 import { AuthService, AuthUser } from '@/lib/auth'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
 import { ArrowLeft, Phone, CheckCircle, Shield, Star, Users, Zap } from "lucide-react"
@@ -48,7 +48,7 @@ export default function ProtectionPlansPage() {
     setShowWizard(true)
   }
 
-  const handleWizardComplete = (subscriptionId: string) => {
+  const handleWizardComplete = (_subscriptionId: string) => {
     // Redirect to dashboard after successful subscription
     router.push('/dashboard')
   }

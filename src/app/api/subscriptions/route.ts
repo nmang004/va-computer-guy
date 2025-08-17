@@ -4,7 +4,7 @@ import { SquareService } from '@/lib/square'
 import { ServerAuthService } from '@/lib/auth-server'
 
 // GET /api/subscriptions - Get user's subscriptions
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const user = await ServerAuthService.getCurrentUser()
     if (!user) {
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    const { planId, paymentToken, customerInfo, billingAddress } = body
+    const { planId, paymentToken, customerInfo } = body
 
     // Validate required fields
     if (!planId || !paymentToken || !customerInfo) {
@@ -132,10 +132,10 @@ export async function POST(request: NextRequest) {
       payment: paymentResult
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Error creating subscription:', error)
     return NextResponse.json(
-      { error: error.message || 'Failed to create subscription' },
+      { error: error instanceof Error ? error.message : 'Failed to create subscription' },
       { status: 500 }
     )
   }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { DatabaseService } from '@/lib/database'
 
 // GET /api/subscription-plans - Get all active subscription plans
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const plans = await DatabaseService.getSubscriptionPlans()
     return NextResponse.json({ plans })

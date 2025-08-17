@@ -3,7 +3,11 @@ import { redirect } from 'next/navigation'
 import { User } from '@supabase/supabase-js'
 
 export interface AuthUser extends User {
-  // Additional user properties if needed
+  user_metadata?: {
+    full_name?: string
+    role?: string
+    [key: string]: unknown
+  }
 }
 
 // Server-side auth functions (must be used in Server Components only)

@@ -2,14 +2,18 @@ import { createClient } from '@/lib/supabase/client'
 import { User } from '@supabase/supabase-js'
 
 export interface AuthUser extends User {
-  // Additional user properties if needed
+  user_metadata?: {
+    full_name?: string
+    role?: string
+    [key: string]: unknown
+  }
 }
 
 // Client-side auth functions
 export class AuthService {
   
   // Sign up with email and password
-  static async signUp(email: string, password: string, metadata?: { [key: string]: any }) {
+  static async signUp(email: string, password: string, metadata?: Record<string, unknown>) {
     const supabase = createClient()
     
     const { data, error } = await supabase.auth.signUp({
@@ -82,7 +86,7 @@ export class AuthService {
   }
 
   // Update user metadata
-  static async updateProfile(updates: { [key: string]: any }) {
+  static async updateProfile(updates: Record<string, unknown>) {
     const supabase = createClient()
     
     const { error } = await supabase.auth.updateUser({
@@ -109,7 +113,7 @@ export interface AuthContextType {
   user: AuthUser | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<void>
-  signUp: (email: string, password: string, metadata?: any) => Promise<void>
+  signUp: (email: string, password: string, metadata?: Record<string, unknown>) => Promise<void>
   signOut: () => Promise<void>
   resetPassword: (email: string) => Promise<void>
 }

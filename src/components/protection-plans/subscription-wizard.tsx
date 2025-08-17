@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { PricingTable } from './pricing-table'
 import { SubscriptionPlan } from '@/lib/database'
@@ -19,8 +18,6 @@ import {
   CreditCard, 
   User, 
   MapPin, 
-  Phone,
-  Mail,
   Shield,
   CheckCircle
 } from 'lucide-react'
@@ -134,7 +131,7 @@ export function SubscriptionWizard({
     loadInitialData()
   }, [])
 
-  const updateWizardData = (section: keyof WizardData, data: any) => {
+  const updateWizardData = (section: keyof WizardData, data: Record<string, unknown>) => {
     setWizardData(prev => ({
       ...prev,
       [section]: { ...prev[section], ...data }
@@ -231,9 +228,10 @@ export function SubscriptionWizard({
         onComplete(result.subscription.id)
       }
 
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Subscription creation error:', err)
-      setError(err.message || 'Failed to create subscription. Please try again.')
+      const errorMessage = err instanceof Error ? err.message : 'Failed to create subscription. Please try again.'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -461,7 +459,7 @@ export function SubscriptionWizard({
               </Button>
               
               <p className="text-sm text-muted-foreground">
-                You'll receive a confirmation email shortly with your account details.
+                You&apos;ll receive a confirmation email shortly with your account details.
               </p>
             </div>
           </div>

@@ -55,7 +55,7 @@ export interface SubscriptionEvent {
   id: string
   subscription_id: string
   event_type: string
-  event_data?: any
+  event_data?: Record<string, unknown>
   created_at: string
 }
 
