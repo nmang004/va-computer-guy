@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation'
-import { ServerAuthService } from '@/lib/auth'
+import { ServerAuthService } from '@/lib/auth-server'
 import { DatabaseService } from '@/lib/database'
 import { DashboardContent } from '@/components/dashboard/dashboard-content'
 

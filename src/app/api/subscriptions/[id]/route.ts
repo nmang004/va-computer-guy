@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { DatabaseService } from '@/lib/database'
 import { SquareService } from '@/lib/square'
-import { ServerAuthService } from '@/lib/auth'
+import { ServerAuthService } from '@/lib/auth-server'
 
 // GET /api/subscriptions/[id] - Get specific subscription
 export async function GET(

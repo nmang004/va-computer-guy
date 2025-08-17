@@ -1,8 +1,12 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteGenerator } from "@/components/home/quote-generator";
+import { client } from "@/sanity/lib/client";
+import { featuredTestimonialsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
+import { urlForImage } from "@/sanity/lib/image";
 import { 
   Shield, 
   Clock, 
@@ -11,10 +15,54 @@ import {
   ArrowRight,
   Home,
   Building,
-  Phone
+  Phone,
+  Quote
 } from "lucide-react";
 
-export default function HomePage() {
+interface Testimonial {
+  _id: string;
+  name: string;
+  title?: string;
+  content: string;
+  rating: number;
+  image?: {
+    asset: { url: string };
+    alt?: string;
+  };
+}
+
+interface BlogPost {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  mainImage?: {
+    asset: { url: string };
+    alt?: string;
+  };
+  publishedAt: string;
+  category?: {
+    title: string;
+    color?: string;
+  };
+}
+
+async function getHomepageData() {
+  try {
+    const [testimonials, featuredPosts] = await Promise.all([
+      client.fetch<Testimonial[]>(featuredTestimonialsQuery),
+      client.fetch<BlogPost[]>(featuredPostsQuery),
+    ]);
+
+    return { testimonials, featuredPosts };
+  } catch (error) {
+    console.error('Error fetching homepage data:', error);
+    return { testimonials: [], featuredPosts: [] };
+  }
+}
+
+export default async function HomePage() {
+  const { testimonials, featuredPosts } = await getHomepageData();
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -205,6 +253,153 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Customer Testimonials */}
+      {testimonials.length > 0 && (
+        <section className="py-16 bg-va-neutral-100">
+          <div className="va-container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-montserrat font-bold mb-4 text-va-text-primary">
+                What Our Customers Say
+              </h2>
+              <p className="text-lg text-va-text-secondary max-w-2xl mx-auto font-roboto">
+                Don&apos;t just take our word for it. Here&apos;s what real customers have to say about our service.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {testimonials.slice(0, 6).map((testimonial) => (
+                <Card key={testimonial._id} className="va-card">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4 mb-4">
+                      {testimonial.image ? (
+                        <Image
+                          src={urlForImage(testimonial.image)?.url() || ''}
+                          alt={testimonial.image.alt || testimonial.name}
+                          width={48}
+                          height={48}
+                          className="rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 bg-va-primary/10 rounded-full flex items-center justify-center">
+                          <Quote className="h-6 w-6 text-va-primary" />
+                        </div>
+                      )}
+                      <div className="flex-1">
+                        <div className="flex items-center gap-1 mb-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`h-4 w-4 ${
+                                i < testimonial.rating
+                                  ? 'text-yellow-400 fill-current'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <h3 className="font-montserrat font-semibold text-va-text-primary">
+                          {testimonial.name}
+                        </h3>
+                        {testimonial.title && (
+                          <p className="text-sm text-va-text-muted font-roboto">
+                            {testimonial.title}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-va-text-secondary font-roboto italic">
+                      &ldquo;{testimonial.content}&rdquo;
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <div className="text-center mt-8">
+              <Button variant="outline" asChild className="va-btn-secondary">
+                <Link href="/about">Read More Reviews</Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Featured Blog Posts */}
+      {featuredPosts.length > 0 && (
+        <section className="py-16 bg-va-neutral-50">
+          <div className="va-container">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-montserrat font-bold mb-4 text-va-text-primary">
+                Latest Tech Tips & Insights
+              </h2>
+              <p className="text-lg text-va-text-secondary max-w-2xl mx-auto font-roboto">
+                Stay informed with our latest articles on computer maintenance, security tips, and technology trends.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+              {featuredPosts.map((post) => (
+                <Card key={post._id} className="va-card hover:shadow-lg transition-shadow">
+                  {post.mainImage && (
+                    <div className="relative h-48 w-full overflow-hidden rounded-t-lg">
+                      <Image
+                        src={urlForImage(post.mainImage)?.url() || ''}
+                        alt={post.mainImage.alt || post.title}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  
+                  <CardHeader>
+                    {post.category && (
+                      <Badge variant="secondary" className="w-fit mb-2">
+                        {post.category.title}
+                      </Badge>
+                    )}
+                    <CardTitle className="font-montserrat text-va-text-primary hover:text-va-primary transition-colors">
+                      <Link href={`/blog/${post.slug.current}`}>
+                        {post.title}
+                      </Link>
+                    </CardTitle>
+                  </CardHeader>
+                  
+                  <CardContent>
+                    {post.excerpt && (
+                      <p className="text-va-text-secondary font-roboto mb-4">
+                        {post.excerpt}
+                      </p>
+                    )}
+                    
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-va-text-muted">
+                        {new Date(post.publishedAt).toLocaleDateString()}
+                      </span>
+                      
+                      <Button variant="outline" size="sm" asChild>
+                        <Link href={`/blog/${post.slug.current}`}>
+                          Read More
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <div className="text-center mt-8">
+              <Button variant="outline" asChild className="va-btn-secondary">
+                <Link href="/blog">
+                  View All Articles
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Protection Plans CTA */}
       <section className="py-16 bg-va-primary text-va-neutral-50">

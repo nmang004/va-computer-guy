@@ -10,9 +10,8 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
 import { PricingTable } from './pricing-table'
-import { SubscriptionPlan, DatabaseService } from '@/lib/database'
+import { SubscriptionPlan } from '@/lib/database'
 import { AuthService, AuthUser } from '@/lib/auth'
-import { SquareService } from '@/lib/square'
 import { 
   ChevronLeft, 
   ChevronRight, 
@@ -108,8 +107,11 @@ export function SubscriptionWizard({
     async function loadInitialData() {
       try {
         // Load subscription plans
-        const subscriptionPlans = await DatabaseService.getSubscriptionPlans()
-        setPlans(subscriptionPlans)
+        const response = await fetch('/api/subscription-plans')
+        if (response.ok) {
+          const data = await response.json()
+          setPlans(data.plans)
+        }
 
         // Check if user is logged in
         const currentUser = await AuthService.getCurrentUser()
@@ -201,62 +203,32 @@ export function SubscriptionWizard({
         throw new Error('Failed to create user account')
       }
 
-      // Step 2: Create customer record in database
-      let customer = await DatabaseService.getCustomerByUserId(currentUser.id)
-      
-      if (!customer) {
-        customer = await DatabaseService.createCustomer({
-          user_id: currentUser.id,
-          email: wizardData.customerInfo.email,
-          full_name: wizardData.customerInfo.fullName,
-          phone: wizardData.customerInfo.phone,
-          address: JSON.stringify(wizardData.customerInfo.address)
+      // Step 2: Create subscription via API
+      const response = await fetch('/api/subscriptions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          planId: wizardData.selectedPlan.id,
+          paymentToken: 'temp-token', // This will be replaced with actual payment token
+          customerInfo: wizardData.customerInfo,
+          billingAddress: wizardData.billingInfo.billingAddress
         })
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Failed to create subscription')
       }
 
-      // Step 3: Create Square customer
-      const squareCustomer = await SquareService.createCustomer({
-        email: wizardData.customerInfo.email,
-        givenName: wizardData.customerInfo.fullName.split(' ')[0],
-        familyName: wizardData.customerInfo.fullName.split(' ').slice(1).join(' '),
-        phoneNumber: wizardData.customerInfo.phone,
-        address: {
-          addressLine1: wizardData.customerInfo.address.line1,
-          addressLine2: wizardData.customerInfo.address.line2,
-          locality: wizardData.customerInfo.address.city,
-          administrativeDistrictLevel1: wizardData.customerInfo.address.state,
-          postalCode: wizardData.customerInfo.address.zipCode,
-          country: 'US'
-        }
-      })
+      const result = await response.json()
 
-      if (!squareCustomer?.id) {
-        throw new Error('Failed to create Square customer')
-      }
-
-      // Step 4: Create subscription
-      const subscription = await DatabaseService.createSubscription({
-        customer_id: customer.id,
-        plan_id: wizardData.selectedPlan.id,
-        status: 'pending',
-        cancel_at_period_end: false
-      })
-
-      // Step 5: Log subscription event
-      await DatabaseService.createEvent({
-        subscription_id: subscription.id,
-        event_type: 'subscription_created',
-        event_data: {
-          plan_name: wizardData.selectedPlan.name,
-          customer_email: wizardData.customerInfo.email
-        }
-      })
-
-      // Step 6: Move to confirmation step
+      // Step 3: Move to confirmation step
       setCurrentStep(STEPS.length - 1)
       
       if (onComplete) {
-        onComplete(subscription.id)
+        onComplete(result.subscription.id)
       }
 
     } catch (err: any) {
