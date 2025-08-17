@@ -146,31 +146,38 @@ const Header = () => {
                 <span className="sr-only">Toggle menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-              <nav className="flex flex-col space-y-4">
-                <Link
-                  href="/"
-                  className="flex items-center pb-4 border-b"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <Image
-                    src="/images/computer-guy-logo.png"
-                    alt="Computer Guy - Helping Good People With Bad Computers"
-                    width={180}
-                    height={45}
-                    className="h-8 w-auto"
-                  />
-                </Link>
+            <SheetContent side="right" className="w-[300px] sm:w-[400px] p-0">
+              <nav className="flex flex-col h-full">
+                {/* Header with Logo */}
+                <div className="p-6 border-b border-va-neutral-200 bg-gradient-to-r from-va-neutral-50 to-va-neutral-100">
+                  <Link
+                    href="/"
+                    className="flex items-center"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <Image
+                      src="/images/computer-guy-logo.png"
+                      alt="Computer Guy - Helping Good People With Bad Computers"
+                      width={180}
+                      height={45}
+                      className="h-8 w-auto"
+                    />
+                  </Link>
+                </div>
 
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-medium text-lg mb-2">Home Services</h3>
-                    <div className="space-y-2 pl-4">
+                {/* Navigation Content */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-6">
+                  {/* Home Services Card */}
+                  <div className="va-card border-l-4 border-l-va-primary">
+                    <h3 className="font-montserrat font-semibold text-lg text-va-primary mb-4">
+                      Home Services
+                    </h3>
+                    <div className="space-y-2">
                       {homeServices.map((service) => (
                         <Link
                           key={service.href}
                           href={service.href}
-                          className="block py-2 text-sm hover:text-primary"
+                          className="block py-3 px-4 text-va-text-secondary font-roboto text-sm rounded-md transition-all duration-200 hover:bg-va-primary/10 hover:text-va-primary hover:translate-x-1 active:scale-98"
                           onClick={() => setIsOpen(false)}
                         >
                           {service.title}
@@ -179,14 +186,17 @@ const Header = () => {
                     </div>
                   </div>
 
-                  <div>
-                    <h3 className="font-medium text-lg mb-2">Business Services</h3>
-                    <div className="space-y-2 pl-4">
+                  {/* Business Services Card */}
+                  <div className="va-card border-l-4 border-l-va-secondary">
+                    <h3 className="font-montserrat font-semibold text-lg text-va-secondary mb-4">
+                      Business Services
+                    </h3>
+                    <div className="space-y-2">
                       {businessServices.map((service) => (
                         <Link
                           key={service.href}
                           href={service.href}
-                          className="block py-2 text-sm hover:text-primary"
+                          className="block py-3 px-4 text-va-text-secondary font-roboto text-sm rounded-md transition-all duration-200 hover:bg-va-secondary/10 hover:text-va-secondary hover:translate-x-1 active:scale-98"
                           onClick={() => setIsOpen(false)}
                         >
                           {service.title}
@@ -195,45 +205,71 @@ const Header = () => {
                     </div>
                   </div>
 
-                  <Link
-                    href="/protection-plans"
-                    className="block py-2 font-medium hover:text-primary"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Protection Plans
-                  </Link>
+                  {/* Other Services */}
+                  <div className="space-y-3">
+                    <Link
+                      href="/protection-plans"
+                      className="block p-4 rounded-lg bg-gradient-to-r from-va-accent/5 to-va-accent/10 border border-va-accent/20 transition-all duration-200 hover:from-va-accent/10 hover:to-va-accent/20 hover:border-va-accent/30 hover:shadow-md active:scale-98"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span className="font-montserrat font-medium text-va-accent text-base">
+                        Protection Plans
+                      </span>
+                      <p className="text-va-text-muted text-xs mt-1 font-roboto">
+                        Comprehensive coverage for your devices
+                      </p>
+                    </Link>
 
-                  <Link
-                    href="/repair-status"
-                    className="block py-2 font-medium hover:text-primary"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Check Repair Status
-                  </Link>
+                    <Link
+                      href="/repair-status"
+                      className="block p-4 rounded-lg bg-va-neutral-100/50 border border-va-neutral-200 transition-all duration-200 hover:bg-va-neutral-100 hover:border-va-neutral-300 hover:shadow-md active:scale-98"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span className="font-montserrat font-medium text-va-text-primary text-base">
+                        Check Repair Status
+                      </span>
+                      <p className="text-va-text-muted text-xs mt-1 font-roboto">
+                        Track your device repair progress
+                      </p>
+                    </Link>
 
-                  <Link
-                    href="/support"
-                    className="block py-2 font-medium hover:text-primary"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Support
-                  </Link>
+                    <Link
+                      href="/support"
+                      className="block p-4 rounded-lg bg-va-neutral-100/50 border border-va-neutral-200 transition-all duration-200 hover:bg-va-neutral-100 hover:border-va-neutral-300 hover:shadow-md active:scale-98"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span className="font-montserrat font-medium text-va-text-primary text-base">
+                        Support
+                      </span>
+                      <p className="text-va-text-muted text-xs mt-1 font-roboto">
+                        Get help and technical assistance
+                      </p>
+                    </Link>
 
-                  <Link
-                    href="/about"
-                    className="block py-2 font-medium hover:text-primary"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    About
-                  </Link>
+                    <Link
+                      href="/about"
+                      className="block p-4 rounded-lg bg-va-neutral-100/50 border border-va-neutral-200 transition-all duration-200 hover:bg-va-neutral-100 hover:border-va-neutral-300 hover:shadow-md active:scale-98"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span className="font-montserrat font-medium text-va-text-primary text-base">
+                        About Us
+                      </span>
+                      <p className="text-va-text-muted text-xs mt-1 font-roboto">
+                        Learn about our team and mission
+                      </p>
+                    </Link>
+                  </div>
                 </div>
 
-                <div className="pt-4 border-t space-y-4">
-                  <div className="flex items-center space-x-2 text-sm text-va-text-secondary">
-                    <Phone className="h-4 w-4 text-va-primary" />
-                    <span className="font-roboto">(757) 375-6764</span>
+                {/* Footer CTA */}
+                <div className="p-6 border-t border-va-neutral-200 bg-gradient-to-r from-va-neutral-50 to-va-neutral-100 space-y-4">
+                  <div className="flex items-center justify-center space-x-3 p-3 rounded-lg bg-white/80 border border-va-neutral-200">
+                    <Phone className="h-5 w-5 text-va-primary" />
+                    <span className="font-montserrat font-medium text-va-text-primary">
+                      (757) 375-6764
+                    </span>
                   </div>
-                  <Button asChild className="w-full va-btn-primary">
+                  <Button asChild className="w-full va-btn-primary h-12 text-base font-medium shadow-lg">
                     <Link href="/booking" onClick={() => setIsOpen(false)}>
                       Book Appointment
                     </Link>

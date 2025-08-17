@@ -361,4 +361,7 @@
   .font-montserrat { font-family: var(--font-montserrat); }
   .font-montserrat-alt { font-family: var(--font-montserrat-alt); }
   .font-roboto { font-family: var(--font-roboto); }
+  
+  /* Interaction utilities */
+  .active\:scale-98:active { transform: scale(0.98); }
 }
