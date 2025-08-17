@@ -65,7 +65,7 @@ export const CustomerLookup: React.FC<CustomerLookupProps> = ({ onTicketFound })
       formatted = formatted.slice(0, 3) + '-' + formatted.slice(3);
     }
     if (formatted.length > 8) {
-      formatted = formatted.slice(0, 8) + '-' + formatted.slice(8, 11);
+      formatted = formatted.slice(0, 8) + '-' + formatted.slice(8);
     }
     
     return formatted;
@@ -108,7 +108,7 @@ export const CustomerLookup: React.FC<CustomerLookupProps> = ({ onTicketFound })
                 placeholder="VCG-2025-001"
                 value={ticketNumber}
                 onChange={handleTicketNumberChange}
-                maxLength={11}
+                maxLength={15}
                 className="font-mono text-center tracking-wider"
                 disabled={isLoading}
                 aria-describedby="ticket-help"
