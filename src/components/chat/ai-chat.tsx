@@ -75,10 +75,10 @@ export default function AiChat() {
 
   if (!state.isOpen) {
     return (
-      <div className="fixed bottom-6 right-6 z-50">
+      <div className="fixed bottom-6 right-6 z-40 pointer-events-none">
         <Button
           onClick={toggleChat}
-          className="w-14 h-14 rounded-full bg-va-primary hover:bg-va-secondary shadow-lg relative"
+          className="w-14 h-14 rounded-full bg-va-primary hover:bg-va-secondary shadow-lg relative pointer-events-auto"
         >
           <MessageCircle className="w-6 h-6 text-white" />
           {state.unreadCount > 0 && (
@@ -92,8 +92,15 @@ export default function AiChat() {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 w-96 max-w-[calc(100vw-2rem)]">
-      <div className="bg-white rounded-lg shadow-2xl border border-va-neutral-200 flex flex-col max-h-[80vh]">
+    <>
+      {/* Backdrop for mobile - close chat when clicking outside */}
+      <div 
+        className="fixed inset-0 z-30 md:hidden"
+        onClick={closeChat}
+      />
+      
+      <div className="fixed bottom-6 right-6 z-40 w-96 max-w-[calc(100vw-2rem)] pointer-events-none">
+        <div className="bg-white rounded-lg shadow-2xl border border-va-neutral-200 flex flex-col max-h-[80vh] pointer-events-auto">
         {/* Header */}
         <div className="bg-va-primary text-white p-4 rounded-t-lg flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -254,7 +261,8 @@ export default function AiChat() {
             </div>
           </>
         )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
