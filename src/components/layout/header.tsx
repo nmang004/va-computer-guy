@@ -60,6 +60,7 @@ const Header = () => {
               height={50}
               className="h-10 w-auto"
               priority
+              fetchPriority="high"
             />
           </Link>
 
@@ -219,6 +220,7 @@ const Header = () => {
                       width={180}
                       height={45}
                       className="h-8 w-auto"
+                      fetchPriority="high"
                     />
                   </Link>
                 </div>
