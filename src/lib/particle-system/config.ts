@@ -7,14 +7,14 @@ export const DEFAULT_PARTICLE_TYPES: ParticleTypeConfig[] = [
     maxSize: 6,
     minOpacity: 0.5,
     maxOpacity: 0.9,
-    minSpeed: 0.2,
-    maxSpeed: 0.8,
-    lifespan: 18,
+    minSpeed: 0.05,
+    maxSpeed: 0.3,
+    lifespan: 25,
     rotationSpeed: 0,
     colors: ['rgba(255, 255, 255, 0.8)', 'rgba(97, 206, 112, 0.6)', 'rgba(1, 112, 185, 0.4)'],
     blurAmount: 0,
     glowIntensity: 2,
-    weight: 0.5
+    weight: 0.6
   },
   {
     type: 'orb',
@@ -22,14 +22,14 @@ export const DEFAULT_PARTICLE_TYPES: ParticleTypeConfig[] = [
     maxSize: 16,
     minOpacity: 0.4,
     maxOpacity: 0.8,
-    minSpeed: 0.1,
-    maxSpeed: 0.6,
-    lifespan: 22,
+    minSpeed: 0.03,
+    maxSpeed: 0.2,
+    lifespan: 30,
     rotationSpeed: 0,
     colors: ['rgba(1, 112, 185, 0.4)', 'rgba(64, 84, 178, 0.3)', 'rgba(97, 206, 112, 0.3)'],
     blurAmount: 1,
     glowIntensity: 4,
-    weight: 0.35
+    weight: 0.3
   },
   {
     type: 'geometric',
@@ -37,14 +37,14 @@ export const DEFAULT_PARTICLE_TYPES: ParticleTypeConfig[] = [
     maxSize: 8,
     minOpacity: 0.4,
     maxOpacity: 0.7,
-    minSpeed: 0.3,
-    maxSpeed: 1,
-    lifespan: 16,
-    rotationSpeed: 0.5,
+    minSpeed: 0.08,
+    maxSpeed: 0.4,
+    lifespan: 20,
+    rotationSpeed: 0.2,
     colors: ['rgba(1, 112, 185, 0.6)', 'rgba(64, 84, 178, 0.5)'],
     blurAmount: 0,
     glowIntensity: 1,
-    weight: 0.1
+    weight: 0.08
   },
   {
     type: 'streak',
@@ -52,27 +52,27 @@ export const DEFAULT_PARTICLE_TYPES: ParticleTypeConfig[] = [
     maxSize: 3,
     minOpacity: 0.5,
     maxOpacity: 0.9,
-    minSpeed: 0.5,
-    maxSpeed: 1.2,
-    lifespan: 14,
+    minSpeed: 0.1,
+    maxSpeed: 0.5,
+    lifespan: 18,
     rotationSpeed: 0,
     colors: ['rgba(255, 255, 255, 0.7)', 'rgba(97, 206, 112, 0.5)'],
     blurAmount: 2,
     glowIntensity: 3,
-    weight: 0.05
+    weight: 0.02
   }
 ];
 
 export const DEFAULT_CONFIG: ParticleSystemConfig = {
-  maxParticles: 60,
-  spawnRate: 8,
+  maxParticles: 100,
+  spawnRate: 12,
   particleTypes: DEFAULT_PARTICLE_TYPES,
   enableParallax: true,
   parallaxStrength: 0.3,
   enableClickEffects: true,
   enableTrails: false,
   trailLength: 5,
-  gravity: { x: 0, y: 0.02 },
+  gravity: { x: 0, y: 0.01 },
   bounds: {
     width: 1200,
     height: 800,
@@ -92,8 +92,8 @@ export const DEFAULT_CONFIG: ParticleSystemConfig = {
 
 export const PARTICLE_PRESETS: ParticlePresets = {
   minimal: {
-    maxParticles: 30,
-    spawnRate: 4,
+    maxParticles: 50,
+    spawnRate: 8,
     enableParallax: false,
     enableClickEffects: false,
     enableTrails: false,
@@ -107,8 +107,8 @@ export const PARTICLE_PRESETS: ParticlePresets = {
     ]
   },
   balanced: {
-    maxParticles: 50,
-    spawnRate: 6,
+    maxParticles: 80,
+    spawnRate: 10,
     enableParallax: true,
     enableClickEffects: true,
     enableTrails: false,
@@ -116,8 +116,8 @@ export const PARTICLE_PRESETS: ParticlePresets = {
     particleTypes: DEFAULT_PARTICLE_TYPES.slice(0, 2)
   },
   rich: {
-    maxParticles: 80,
-    spawnRate: 10,
+    maxParticles: 120,
+    spawnRate: 15,
     enableParallax: true,
     enableClickEffects: true,
     enableTrails: true,
