@@ -33,7 +33,8 @@ const Header = () => {
 
   const businessServices = [
     { title: "Managed IT Support", href: "/services/business-services/managed-it" },
-    { title: "Network & Server Solutions", href: "/services/business-services/network-solutions" },
+    { title: "Network Solutions", href: "/services/business-services/network-solutions" },
+    { title: "Server Solutions", href: "/services/business-services/server-solutions" },
     { title: "Data Backup & Security", href: "/services/business-services/data-security" },
     { title: "Business Consulting", href: "/services/business-services/consulting" },
   ];
@@ -43,8 +44,8 @@ const Header = () => {
     { title: "Software Support", href: "/services/remote-services/software-support" },
     { title: "Virus Removal", href: "/services/remote-services/virus-removal" },
     { title: "Performance Optimization", href: "/services/remote-services/performance-optimization" },
-    { title: "Emergency Support", href: "/services/remote-services/emergency-support" },
   ];
+
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
