@@ -128,14 +128,6 @@ const Header = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/protection-plans" legacyBehavior passHref>
-                    <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-transparent data-[state=open]:bg-va-primary/10">
-                      Protection Plans
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
                   <Link href="/repair-status" legacyBehavior passHref>
                     <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-transparent data-[state=open]:bg-va-primary/10">
                       Check Repair Status
@@ -144,19 +136,50 @@ const Header = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/support" legacyBehavior passHref>
-                    <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-transparent data-[state=open]:bg-va-primary/10">
-                      Support
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <Link href="/about" legacyBehavior passHref>
-                    <NavigationMenuLink className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-transparent data-[state=open]:bg-va-primary/10">
-                      About
-                    </NavigationMenuLink>
-                  </Link>
+                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">About</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 w-[300px]">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/about"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary"
+                          >
+                            <div className="text-sm font-medium leading-none">About Us</div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              Learn about our team and mission
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/protection-plans"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary"
+                          >
+                            <div className="text-sm font-medium leading-none">Protection Plans</div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              Comprehensive coverage for your devices
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href="/support"
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary"
+                          >
+                            <div className="text-sm font-medium leading-none">Support</div>
+                            <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                              Get help and technical assistance
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    </ul>
+                  </NavigationMenuContent>
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
@@ -286,19 +309,39 @@ const Header = () => {
                     )}
                   </div>
 
-                  {/* Other Navigation Items */}
+                  {/* Check Repair Status */}
+                  <div>
+                    <Link
+                      href="/repair-status"
+                      className="flex items-center w-full font-montserrat font-semibold text-base text-va-text-primary pb-2 border-b border-va-neutral-300 transition-colors hover:text-va-text-primary/80"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Check Repair Status
+                    </Link>
+                  </div>
+
+                  {/* About Section */}
                   <div>
                     <button
                       onClick={() => setOtherServicesOpen(!otherServicesOpen)}
                       className="flex items-center justify-between w-full font-montserrat font-semibold text-base text-va-text-primary pb-2 border-b border-va-neutral-300 transition-colors hover:text-va-text-primary/80"
                     >
-                      <span>Other Services</span>
+                      <span>About</span>
                       <ChevronRight 
                         className={`h-4 w-4 transition-transform duration-200 ${otherServicesOpen ? 'rotate-90' : ''}`}
                       />
                     </button>
                     {otherServicesOpen && (
                       <ul className="space-y-0 mt-3">
+                        <li>
+                          <Link
+                            href="/about"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            About Us
+                          </Link>
+                        </li>
                         <li>
                           <Link
                             href="/protection-plans"
@@ -310,29 +353,11 @@ const Header = () => {
                         </li>
                         <li>
                           <Link
-                            href="/repair-status"
-                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            Check Repair Status
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
                             href="/support"
                             className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
                             onClick={() => setIsOpen(false)}
                           >
                             Support
-                          </Link>
-                        </li>
-                        <li>
-                          <Link
-                            href="/about"
-                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            About Us
                           </Link>
                         </li>
                       </ul>
