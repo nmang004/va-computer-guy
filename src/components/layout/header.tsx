@@ -64,11 +64,11 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-6">
+          <nav className="hidden lg:flex items-center space-x-2">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">Home Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary data-[active]:bg-transparent">Home Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       {homeServices.map((service) => (
@@ -88,7 +88,7 @@ const Header = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">Business Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary data-[active]:bg-transparent">Business Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       {businessServices.map((service) => (
@@ -108,7 +108,7 @@ const Header = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">Remote Services</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary data-[active]:bg-transparent">Remote Services</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       {remoteServices.map((service) => (
@@ -136,7 +136,7 @@ const Header = () => {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">About</NavigationMenuTrigger>
+                  <NavigationMenuTrigger className="bg-transparent hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary data-[active]:bg-transparent">About</NavigationMenuTrigger>
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 w-[300px]">
                       <li>
@@ -198,7 +198,7 @@ const Header = () => {
 
           {/* Mobile Menu Button */}
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="md:hidden">
+            <SheetTrigger asChild className="lg:hidden">
               <Button variant="ghost" size="sm">
                 <Menu className="h-5 w-5" />
                 <span className="sr-only">Toggle menu</span>
