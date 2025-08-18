@@ -404,7 +404,7 @@ export default async function HomePage() {
       {/* Protection Plans CTA */}
       <section className="py-16 bg-va-primary text-va-neutral-50">
         <div className="va-container text-center">
-          <h2 className="text-3xl font-montserrat font-bold mb-4">Stay Protected Year-Round</h2>
+          <h2 className="text-3xl font-montserrat font-bold mb-4" style={{ color: 'var(--va-neutral-50)' }}>Stay Protected Year-Round</h2>
           <p className="text-xl mb-8 max-w-2xl mx-auto text-va-neutral-50 font-roboto">
             Don&apos;t wait for problems to strike. Our Protection Plans provide proactive monitoring, 
             regular maintenance, and priority support to keep your technology running smoothly.

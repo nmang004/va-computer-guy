@@ -71,9 +71,12 @@ export function ServiceCTA({
   return (
     <section className={`py-16 ${getVariantClasses()}`}>
       <div className="va-container text-center">
-        <h2 className={`text-3xl font-montserrat font-bold mb-4 ${
-          variant === "minimal" ? "text-va-text-primary" : "text-va-neutral-50"
-        }`}>
+        <h2 
+          className="text-3xl font-montserrat font-bold mb-4"
+          style={{ 
+            color: variant === "minimal" ? "var(--va-text-primary)" : "var(--va-neutral-50)" 
+          }}
+        >
           {title}
         </h2>
         <p className={`text-xl mb-8 max-w-2xl mx-auto font-roboto ${
