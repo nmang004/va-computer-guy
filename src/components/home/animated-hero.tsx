@@ -14,7 +14,7 @@ export function AnimatedHero({ children, className = '' }: AnimatedHeroProps) {
       <div className="animated-hero__gradient" />
       
       {/* Particle background */}
-      <ParticleBackground />
+      <ParticleBackground preset="rich" />
       
       {/* Content overlay for better text contrast */}
       <div className="animated-hero__overlay" />
