@@ -405,7 +405,7 @@ export default async function HomePage() {
       <section className="py-16 bg-va-primary text-va-neutral-50">
         <div className="va-container text-center">
           <h2 className="text-3xl font-montserrat font-bold mb-4">Stay Protected Year-Round</h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90 font-roboto">
+          <p className="text-xl mb-8 max-w-2xl mx-auto text-va-neutral-50 font-roboto">
             Don&apos;t wait for problems to strike. Our Protection Plans provide proactive monitoring, 
             regular maintenance, and priority support to keep your technology running smoothly.
           </p>
@@ -413,7 +413,7 @@ export default async function HomePage() {
             <Button size="lg" variant="secondary" asChild className="va-btn-accent">
               <Link href="/protection-plans">View Protection Plans</Link>
             </Button>
-            <Button size="lg" variant="outline" asChild className="border-va-neutral-50 text-va-neutral-50 hover:bg-va-neutral-50 hover:text-va-primary">
+            <Button size="lg" variant="outline" asChild className="bg-va-neutral-50 border-va-primary text-va-primary hover:bg-va-primary hover:text-va-neutral-50 shadow-md">
               <Link href="/repair-status">Check Repair Status</Link>
             </Button>
           </div>

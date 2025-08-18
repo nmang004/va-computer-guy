@@ -51,7 +51,7 @@ export function ServiceCTA({
       case "gradient":
         return {
           primary: "va-btn-accent",
-          secondary: "border-va-neutral-50 text-va-neutral-50 hover:bg-va-neutral-50 hover:text-va-primary"
+          secondary: "border-va-primary text-va-primary hover:bg-va-primary hover:text-va-neutral-50"
         };
       case "minimal":
         return {
@@ -61,7 +61,7 @@ export function ServiceCTA({
       default:
         return {
           primary: "va-btn-accent",
-          secondary: "border-va-neutral-50 text-va-neutral-50 hover:bg-va-neutral-50 hover:text-va-primary"
+          secondary: "border-va-primary text-va-primary hover:bg-va-primary hover:text-va-neutral-50"
         };
     }
   };
@@ -75,7 +75,7 @@ export function ServiceCTA({
           {title}
         </h2>
         <p className={`text-xl mb-8 max-w-2xl mx-auto font-roboto ${
-          variant === "minimal" ? "text-va-text-secondary" : "opacity-90"
+          variant === "minimal" ? "text-va-text-secondary" : "text-va-neutral-50"
         }`}>
           {description}
         </p>
@@ -91,7 +91,7 @@ export function ServiceCTA({
             size="lg" 
             variant="outline" 
             asChild 
-            className={`bg-transparent ${buttonVariants.secondary}`}
+            className={`${variant === "gradient" || variant === "default" ? "bg-va-neutral-50 shadow-md" : "bg-transparent"} ${buttonVariants.secondary}`}
           >
             <Link href={secondaryAction.href}>
               {secondaryAction.icon}
@@ -102,7 +102,7 @@ export function ServiceCTA({
 
         {emergencyNote && (
           <div className={`text-sm font-roboto ${
-            variant === "minimal" ? "text-va-text-muted" : "opacity-80"
+            variant === "minimal" ? "text-va-text-muted" : "text-va-neutral-50"
           }`}>
             {emergencyNote}
           </div>
@@ -110,7 +110,7 @@ export function ServiceCTA({
 
         <div className="mt-8 flex items-center justify-center gap-2 text-sm font-roboto">
           <MessageCircle className="h-4 w-4" />
-          <span className={variant === "minimal" ? "text-va-text-muted" : "opacity-80"}>
+          <span className={variant === "minimal" ? "text-va-text-muted" : "text-va-neutral-50"}>
             24/7 Support Available • Same-Day Service • 30-Day Warranty
           </span>
         </div>
