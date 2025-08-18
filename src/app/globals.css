@@ -407,20 +407,26 @@
   }
 
   .particle {
-    @apply absolute rounded-full opacity-60;
+    @apply absolute rounded-full;
     width: var(--particle-size);
     height: var(--particle-size);
     left: var(--particle-x);
     top: var(--particle-y);
-    background: radial-gradient(circle, 
-      rgba(255, 255, 255, 0.8) 0%, 
-      rgba(255, 255, 255, 0.4) 50%, 
-      rgba(97, 206, 112, 0.3) 100%
+    background: radial-gradient(circle at center, 
+      rgba(255, 255, 255, 0.9) 0%, 
+      rgba(255, 255, 255, 0.6) 40%, 
+      rgba(97, 206, 112, 0.4) 70%,
+      rgba(255, 255, 255, 0.2) 100%
     );
+    box-shadow: 
+      0 0 6px rgba(255, 255, 255, 0.4),
+      0 0 12px rgba(97, 206, 112, 0.2);
+    opacity: 0.8;
     animation-delay: var(--particle-delay);
     animation-duration: var(--particle-duration);
     animation-iteration-count: infinite;
     animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
+    will-change: transform, opacity;
   }
 
   .particle--up {

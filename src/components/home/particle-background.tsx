@@ -27,11 +27,11 @@ export function ParticleBackground() {
         const directions: Particle['direction'][] = ['up', 'diagonal-up', 'float'];
         newParticles.push({
           id: i,
-          size: Math.random() * 4 + 2, // 2-6px
+          size: Math.random() * 4 + 3, // 3-7px for better visibility
           x: Math.random() * 100, // 0-100%
-          y: Math.random() * 100, // 0-100%
+          y: 110 + Math.random() * 20, // Start below screen (110-130%)
           duration: Math.random() * 15 + 10, // 10-25s
-          delay: Math.random() * 2, // 0-2s delay
+          delay: Math.random() * 0.2 + 0.4, // 0.4-0.6s delay
           direction: directions[Math.floor(Math.random() * directions.length)]
         });
       }
