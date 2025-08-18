@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { QuoteGenerator } from "@/components/home/quote-generator";
+import { AnimatedHero } from "@/components/home/animated-hero";
 import { client } from "@/sanity/lib/client";
 import { featuredTestimonialsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
 import { 
@@ -64,48 +65,48 @@ export default async function HomePage() {
   const { testimonials, featuredPosts } = await getHomepageData();
   return (
     <div className="flex flex-col">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-va-neutral-50 to-va-neutral-100 py-20">
+      {/* Animated Hero Section */}
+      <AnimatedHero className="py-20">
         <div className="va-container">
           <div className="text-center max-w-4xl mx-auto">
             <Badge variant="secondary" className="mb-4 bg-va-secondary text-va-neutral-50 font-montserrat">
               Serving Virginia Beach & Hampton Roads Since 2010
             </Badge>
-            <h1 className="text-4xl md:text-6xl font-montserrat font-bold mb-6 text-va-text-primary">
+            <h1 className="text-4xl md:text-6xl font-montserrat font-bold mb-6 text-va-neutral-50">
               Fast, Reliable Computer Repair & IT Support
             </h1>
-            <p className="text-xl text-va-text-secondary mb-8 max-w-2xl mx-auto font-roboto">
+            <p className="text-xl text-va-neutral-50/90 mb-8 max-w-2xl mx-auto font-roboto">
               From virus removal to complete system overhauls, we fix it right the first time. 
               Professional service for homes and businesses with transparent pricing.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" asChild className="va-btn-primary">
+              <Button size="lg" asChild className="va-btn-accent hover:scale-105 transition-transform">
                 <Link href="/booking">
                   <Phone className="mr-2 h-4 w-4" />
                   Book Repair Now
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="va-btn-secondary">
+              <Button size="lg" variant="outline" asChild className="border-va-neutral-50/50 text-va-neutral-50 hover:bg-va-neutral-50/10 hover:border-va-neutral-50">
                 <Link href="#quote">Get Instant Quote</Link>
               </Button>
             </div>
-            <div className="mt-8 flex items-center justify-center gap-6 text-sm text-va-text-secondary font-roboto">
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-va-neutral-50/80 font-roboto">
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-va-success" />
+                <CheckCircle className="h-4 w-4 text-va-accent" />
                 <span>Same-Day Service</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-va-success" />
+                <CheckCircle className="h-4 w-4 text-va-accent" />
                 <span>30-Day Warranty</span>
               </div>
               <div className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-va-success" />
+                <CheckCircle className="h-4 w-4 text-va-accent" />
                 <span>No Fix, No Fee</span>
               </div>
             </div>
           </div>
         </div>
-      </section>
+      </AnimatedHero>
 
       {/* Instant Quote Generator */}
       <section id="quote" className="py-16 bg-va-neutral-50">
