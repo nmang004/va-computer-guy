@@ -1,0 +1,17 @@
+# Modern browsers only - no legacy polyfills needed
+# Reduces bundle size and improves Lighthouse scores
+
+# Chrome, Edge, Firefox, Safari with ES6+ support
+> 0.5%
+last 2 versions
+not dead
+not ie 11
+not safari < 14
+not chrome < 87
+not firefox < 78
+not edge < 88
+
+# Exclude old mobile browsers
+not ios_saf < 14
+not android < 5
+not samsung < 13

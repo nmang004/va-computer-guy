@@ -57,9 +57,14 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Experimental features for better SEO
+  // Experimental features for better SEO and performance
   experimental: {
     optimizePackageImports: ['lucide-react'],
+  },
+  
+  // Compiler optimizations for modern browsers
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
   },
 };
 
