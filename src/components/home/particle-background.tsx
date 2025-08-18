@@ -29,9 +29,9 @@ export function ParticleBackground() {
           id: i,
           size: Math.random() * 4 + 3, // 3-7px for better visibility
           x: Math.random() * 100, // 0-100%
-          y: 110 + Math.random() * 20, // Start below screen (110-130%)
-          duration: Math.random() * 15 + 10, // 10-25s
-          delay: Math.random() * 0.2 + 0.4, // 0.4-0.6s delay
+          y: Math.random() * 100, // 0-100% spread throughout hero
+          duration: Math.random() * 20 + 25, // 25-45s much slower
+          delay: Math.random() * 3, // 0-3s delay
           direction: directions[Math.floor(Math.random() * directions.length)]
         });
       }
