@@ -9,7 +9,6 @@ interface Particle {
   y: number;
   duration: number;
   delay: number;
-  direction: 'up' | 'diagonal-up' | 'float';
 }
 
 export function ParticleBackground() {
@@ -24,15 +23,13 @@ export function ParticleBackground() {
       const newParticles: Particle[] = [];
 
       for (let i = 0; i < particleCount; i++) {
-        const directions: Particle['direction'][] = ['up', 'diagonal-up', 'float'];
         newParticles.push({
           id: i,
-          size: Math.random() * 4 + 3, // 3-7px for better visibility
+          size: Math.random() * 3 + 2, // 2-5px
           x: Math.random() * 100, // 0-100%
-          y: Math.random() * 100, // 0-100% spread throughout hero
-          duration: Math.random() * 20 + 25, // 25-45s much slower
-          delay: Math.random() * 3, // 0-3s delay
-          direction: directions[Math.floor(Math.random() * directions.length)]
+          y: Math.random() * 100, // 0-100%
+          duration: Math.random() * 10 + 8, // 8-18s
+          delay: Math.random() * 5, // 0-5s delay
         });
       }
 
@@ -56,7 +53,7 @@ export function ParticleBackground() {
       {particles.map((particle) => (
         <div
           key={particle.id}
-          className={`particle particle--${particle.direction}`}
+          className="particle"
           style={{
             '--particle-size': `${particle.size}px`,
             '--particle-x': `${particle.x}%`,

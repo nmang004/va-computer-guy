@@ -413,32 +413,14 @@
     left: var(--particle-x);
     top: var(--particle-y);
     background: radial-gradient(circle at center, 
-      rgba(255, 255, 255, 0.9) 0%, 
-      rgba(255, 255, 255, 0.6) 40%, 
-      rgba(97, 206, 112, 0.4) 70%,
-      rgba(255, 255, 255, 0.2) 100%
+      rgba(255, 255, 255, 0.8) 0%, 
+      rgba(255, 255, 255, 0.4) 60%, 
+      rgba(97, 206, 112, 0.3) 100%
     );
-    box-shadow: 
-      0 0 6px rgba(255, 255, 255, 0.4),
-      0 0 12px rgba(97, 206, 112, 0.2);
-    opacity: 0.8;
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+    opacity: 0.6;
+    animation: particle-simple-float var(--particle-duration) ease-in-out infinite;
     animation-delay: var(--particle-delay);
-    animation-duration: var(--particle-duration);
-    animation-iteration-count: infinite;
-    animation-timing-function: cubic-bezier(0.4, 0, 0.6, 1);
-    will-change: transform, opacity;
-  }
-
-  .particle--up {
-    animation-name: particle-float-up;
-  }
-
-  .particle--diagonal-up {
-    animation-name: particle-float-diagonal;
-  }
-
-  .particle--float {
-    animation-name: particle-float-organic;
   }
 
   /* Hover effects */
@@ -496,63 +478,22 @@
   }
 }
 
-@keyframes particle-float-up {
-  0% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.6;
-  }
-  90% {
-    opacity: 0.6;
-  }
-  100% {
-    transform: translateY(-20vh) translateX(10px) scale(1);
-    opacity: 0;
-  }
-}
-
-@keyframes particle-float-diagonal {
-  0% {
-    transform: translateY(0) translateX(0) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.7;
-  }
-  90% {
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(-15vh) translateX(25px) scale(1);
-    opacity: 0;
-  }
-}
-
-@keyframes particle-float-organic {
-  0% {
-    transform: translateY(0) translateX(0) rotate(0deg) scale(1);
-    opacity: 0;
-  }
-  10% {
-    opacity: 0.5;
+@keyframes particle-simple-float {
+  0%, 100% {
+    transform: translateY(0px) translateX(0px);
+    opacity: 0.4;
   }
   25% {
-    transform: translateY(-5vh) translateX(-5px) rotate(90deg) scale(1);
+    transform: translateY(-10px) translateX(5px);
+    opacity: 0.8;
   }
   50% {
-    transform: translateY(-10vh) translateX(5px) rotate(180deg) scale(1);
+    transform: translateY(-5px) translateX(-3px);
+    opacity: 0.6;
   }
   75% {
-    transform: translateY(-15vh) translateX(-3px) rotate(270deg) scale(1);
-  }
-  90% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(-20vh) translateX(8px) rotate(360deg) scale(1);
-    opacity: 0;
+    transform: translateY(-15px) translateX(2px);
+    opacity: 0.7;
   }
 }
 
