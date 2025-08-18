@@ -30,8 +30,8 @@ export function ParticleBackground() {
           size: Math.random() * 4 + 2, // 2-6px
           x: Math.random() * 100, // 0-100%
           y: Math.random() * 100, // 0-100%
-          duration: Math.random() * 20 + 15, // 15-35s
-          delay: Math.random() * 10, // 0-10s delay
+          duration: Math.random() * 15 + 10, // 10-25s
+          delay: Math.random() * 2, // 0-2s delay
           direction: directions[Math.floor(Math.random() * directions.length)]
         });
       }

@@ -86,7 +86,7 @@ export default async function HomePage() {
                   Book Repair Now
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" asChild className="border-va-neutral-50/50 text-va-neutral-50 hover:bg-va-neutral-50/10 hover:border-va-neutral-50">
+              <Button size="lg" variant="outline" asChild className="border-va-neutral-50 text-va-neutral-50 bg-transparent hover:bg-va-neutral-50 hover:text-va-primary transition-colors">
                 <Link href="#quote">Get Instant Quote</Link>
               </Button>
             </div>
