@@ -47,29 +47,46 @@ export function createParticle(
   config: ParticleTypeConfig,
   bounds: { width: number; height: number; padding: number }
 ): Omit<ParticleState, 'id' | 'element' | 'isActive'> {
-  const spawnEdge = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
+  // 70% chance to spawn within visible area, 30% chance to spawn at edges
+  const spawnInside = Math.random() < 0.7;
   let position: Vector2D;
   let velocity: Vector2D;
 
-  // Spawn particles at screen edges with inward velocity
-  switch (spawnEdge) {
-    case 0: // top
-      position = { x: randomBetween(0, bounds.width), y: -bounds.padding };
-      velocity = { x: randomBetween(-0.5, 0.5), y: randomBetween(config.minSpeed, config.maxSpeed) };
-      break;
-    case 1: // right
-      position = { x: bounds.width + bounds.padding, y: randomBetween(0, bounds.height) };
-      velocity = { x: -randomBetween(config.minSpeed, config.maxSpeed), y: randomBetween(-0.5, 0.5) };
-      break;
-    case 2: // bottom
-      position = { x: randomBetween(0, bounds.width), y: bounds.height + bounds.padding };
-      velocity = { x: randomBetween(-0.5, 0.5), y: -randomBetween(config.minSpeed, config.maxSpeed) };
-      break;
-    case 3: // left
-    default:
-      position = { x: -bounds.padding, y: randomBetween(0, bounds.height) };
-      velocity = { x: randomBetween(config.minSpeed, config.maxSpeed), y: randomBetween(-0.5, 0.5) };
-      break;
+  if (spawnInside) {
+    // Spawn within the visible area with gentle floating motion
+    position = {
+      x: randomBetween(bounds.padding, bounds.width - bounds.padding),
+      y: randomBetween(bounds.padding, bounds.height - bounds.padding)
+    };
+    
+    // Gentle floating velocity
+    velocity = {
+      x: randomBetween(-config.minSpeed * 0.5, config.minSpeed * 0.5),
+      y: randomBetween(-config.minSpeed * 0.8, -config.minSpeed * 0.3)
+    };
+  } else {
+    // Spawn at edges with inward velocity (original behavior but improved)
+    const spawnEdge = Math.floor(Math.random() * 4);
+    
+    switch (spawnEdge) {
+      case 0: // top
+        position = { x: randomBetween(0, bounds.width), y: -bounds.padding };
+        velocity = { x: randomBetween(-0.3, 0.3), y: randomBetween(config.minSpeed * 0.8, config.maxSpeed) };
+        break;
+      case 1: // right
+        position = { x: bounds.width + bounds.padding, y: randomBetween(0, bounds.height) };
+        velocity = { x: -randomBetween(config.minSpeed * 0.8, config.maxSpeed), y: randomBetween(-0.3, 0.3) };
+        break;
+      case 2: // bottom
+        position = { x: randomBetween(0, bounds.width), y: bounds.height + bounds.padding };
+        velocity = { x: randomBetween(-0.3, 0.3), y: -randomBetween(config.minSpeed * 0.8, config.maxSpeed) };
+        break;
+      case 3: // left
+      default:
+        position = { x: -bounds.padding, y: randomBetween(0, bounds.height) };
+        velocity = { x: randomBetween(config.minSpeed * 0.8, config.maxSpeed), y: randomBetween(-0.3, 0.3) };
+        break;
+    }
   }
 
   return {
@@ -80,7 +97,7 @@ export function createParticle(
     opacity: randomBetween(config.minOpacity, config.maxOpacity),
     rotation: randomBetween(0, 360),
     rotationSpeed: randomBetween(-config.rotationSpeed, config.rotationSpeed),
-    lifespan: config.lifespan + randomBetween(-2, 2),
+    lifespan: config.lifespan + randomBetween(-3, 3),
     age: 0,
     depth: randomBetween(1, 10)
   };
