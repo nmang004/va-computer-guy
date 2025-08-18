@@ -13,16 +13,22 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { Menu, Phone } from "lucide-react";
+import { Menu, Phone, ChevronRight } from "lucide-react";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [homeServicesOpen, setHomeServicesOpen] = useState(false);
+  const [businessServicesOpen, setBusinessServicesOpen] = useState(false);
+  const [remoteServicesOpen, setRemoteServicesOpen] = useState(false);
+  const [otherServicesOpen, setOtherServicesOpen] = useState(false);
 
   const homeServices = [
     { title: "PC & Mac Repair", href: "/services/home-services/pc-mac-repair" },
     { title: "Virus & Malware Removal", href: "/services/home-services/virus-removal" },
     { title: "Data Recovery", href: "/services/home-services/data-recovery" },
     { title: "In-Home Setup & Support", href: "/services/home-services/in-home-support" },
+    { title: "Computer Setup", href: "/services/home-services/computer-setup" },
+    { title: "Remote Support", href: "/services/home-services/remote-support" },
   ];
 
   const businessServices = [
@@ -30,6 +36,14 @@ const Header = () => {
     { title: "Network & Server Solutions", href: "/services/business-services/network-solutions" },
     { title: "Data Backup & Security", href: "/services/business-services/data-security" },
     { title: "Business Consulting", href: "/services/business-services/consulting" },
+  ];
+
+  const remoteServices = [
+    { title: "Quick Fixes", href: "/services/remote-services/quick-fixes" },
+    { title: "Software Support", href: "/services/remote-services/software-support" },
+    { title: "Virus Removal", href: "/services/remote-services/virus-removal" },
+    { title: "Performance Optimization", href: "/services/remote-services/performance-optimization" },
+    { title: "Emergency Support", href: "/services/remote-services/emergency-support" },
   ];
 
   return (
@@ -77,6 +91,26 @@ const Header = () => {
                   <NavigationMenuContent>
                     <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
                       {businessServices.map((service) => (
+                        <li key={service.href}>
+                          <NavigationMenuLink asChild>
+                            <Link
+                              href={service.href}
+                              className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary"
+                            >
+                              <div className="text-sm font-medium leading-none">{service.title}</div>
+                            </Link>
+                          </NavigationMenuLink>
+                        </li>
+                      ))}
+                    </ul>
+                  </NavigationMenuContent>
+                </NavigationMenuItem>
+
+                <NavigationMenuItem>
+                  <NavigationMenuTrigger className="hover:bg-va-primary/10 hover:text-va-primary focus:bg-va-primary/10 focus:text-va-primary data-[state=open]:bg-va-primary/10 data-[state=open]:text-va-primary">Remote Services</NavigationMenuTrigger>
+                  <NavigationMenuContent>
+                    <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-2">
+                      {remoteServices.map((service) => (
                         <li key={service.href}>
                           <NavigationMenuLink asChild>
                             <Link
@@ -166,90 +200,142 @@ const Header = () => {
                 </div>
 
                 {/* Navigation List */}
-                <div className="flex-1 overflow-y-auto space-y-8">
+                <div className="flex-1 overflow-y-auto space-y-4">
                   {/* Home Services Section */}
                   <div>
-                    <h3 className="font-montserrat font-semibold text-base text-va-primary mb-4 pb-2 border-b border-va-primary/20">
-                      Home Services
-                    </h3>
-                    <ul className="space-y-0">
-                      {homeServices.map((service) => (
-                        <li key={service.href}>
-                          <Link
-                            href={service.href}
-                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-primary/10 hover:text-va-primary hover:pl-3 border-l-3 border-transparent hover:border-va-primary"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            {service.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <button
+                      onClick={() => setHomeServicesOpen(!homeServicesOpen)}
+                      className="flex items-center justify-between w-full font-montserrat font-semibold text-base text-va-primary pb-2 border-b border-va-primary/20 transition-colors hover:text-va-primary/80"
+                    >
+                      <span>Home Services</span>
+                      <ChevronRight 
+                        className={`h-4 w-4 transition-transform duration-200 ${homeServicesOpen ? 'rotate-90' : ''}`}
+                      />
+                    </button>
+                    {homeServicesOpen && (
+                      <ul className="space-y-0 mt-3">
+                        {homeServices.map((service) => (
+                          <li key={service.href}>
+                            <Link
+                              href={service.href}
+                              className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-primary/10 hover:text-va-primary hover:pl-3 border-l-3 border-transparent hover:border-va-primary"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {service.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
 
                   {/* Business Services Section */}
                   <div>
-                    <h3 className="font-montserrat font-semibold text-base text-va-secondary mb-4 pb-2 border-b border-va-secondary/20">
-                      Business Services
-                    </h3>
-                    <ul className="space-y-0">
-                      {businessServices.map((service) => (
-                        <li key={service.href}>
-                          <Link
-                            href={service.href}
-                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-secondary/10 hover:text-va-secondary hover:pl-3 border-l-3 border-transparent hover:border-va-secondary"
-                            onClick={() => setIsOpen(false)}
-                          >
-                            {service.title}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
+                    <button
+                      onClick={() => setBusinessServicesOpen(!businessServicesOpen)}
+                      className="flex items-center justify-between w-full font-montserrat font-semibold text-base text-va-secondary pb-2 border-b border-va-secondary/20 transition-colors hover:text-va-secondary/80"
+                    >
+                      <span>Business Services</span>
+                      <ChevronRight 
+                        className={`h-4 w-4 transition-transform duration-200 ${businessServicesOpen ? 'rotate-90' : ''}`}
+                      />
+                    </button>
+                    {businessServicesOpen && (
+                      <ul className="space-y-0 mt-3">
+                        {businessServices.map((service) => (
+                          <li key={service.href}>
+                            <Link
+                              href={service.href}
+                              className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-secondary/10 hover:text-va-secondary hover:pl-3 border-l-3 border-transparent hover:border-va-secondary"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {service.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
+
+                  {/* Remote Services Section */}
+                  <div>
+                    <button
+                      onClick={() => setRemoteServicesOpen(!remoteServicesOpen)}
+                      className="flex items-center justify-between w-full font-montserrat font-semibold text-base text-orange-600 pb-2 border-b border-orange-600/20 transition-colors hover:text-orange-600/80"
+                    >
+                      <span>Remote Services</span>
+                      <ChevronRight 
+                        className={`h-4 w-4 transition-transform duration-200 ${remoteServicesOpen ? 'rotate-90' : ''}`}
+                      />
+                    </button>
+                    {remoteServicesOpen && (
+                      <ul className="space-y-0 mt-3">
+                        {remoteServices.map((service) => (
+                          <li key={service.href}>
+                            <Link
+                              href={service.href}
+                              className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-orange-100 hover:text-orange-600 hover:pl-3 border-l-3 border-transparent hover:border-orange-600"
+                              onClick={() => setIsOpen(false)}
+                            >
+                              {service.title}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
 
                   {/* Other Navigation Items */}
                   <div>
-                    <h3 className="font-montserrat font-semibold text-base text-va-text-primary mb-4 pb-2 border-b border-va-neutral-300">
-                      Other Services
-                    </h3>
-                    <ul className="space-y-0">
-                      <li>
-                        <Link
-                          href="/protection-plans"
-                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-accent/10 hover:text-va-accent hover:pl-3 border-l-3 border-transparent hover:border-va-accent"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Protection Plans
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/repair-status"
-                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Check Repair Status
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/support"
-                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          Support
-                        </Link>
-                      </li>
-                      <li>
-                        <Link
-                          href="/about"
-                          className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          About Us
-                        </Link>
-                      </li>
-                    </ul>
+                    <button
+                      onClick={() => setOtherServicesOpen(!otherServicesOpen)}
+                      className="flex items-center justify-between w-full font-montserrat font-semibold text-base text-va-text-primary pb-2 border-b border-va-neutral-300 transition-colors hover:text-va-text-primary/80"
+                    >
+                      <span>Other Services</span>
+                      <ChevronRight 
+                        className={`h-4 w-4 transition-transform duration-200 ${otherServicesOpen ? 'rotate-90' : ''}`}
+                      />
+                    </button>
+                    {otherServicesOpen && (
+                      <ul className="space-y-0 mt-3">
+                        <li>
+                          <Link
+                            href="/protection-plans"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-accent/10 hover:text-va-accent hover:pl-3 border-l-3 border-transparent hover:border-va-accent"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Protection Plans
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/repair-status"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Check Repair Status
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/support"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            Support
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            href="/about"
+                            className="block py-3 pl-0 pr-2 text-va-text-secondary font-roboto text-sm transition-all duration-200 hover:bg-va-neutral-100 hover:text-va-text-primary hover:pl-3 border-l-3 border-transparent hover:border-va-neutral-400"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            About Us
+                          </Link>
+                        </li>
+                      </ul>
+                    )}
                   </div>
                 </div>
 
