@@ -400,34 +400,142 @@
     animation: content-fade-in 1.5s ease-out 0.3s both;
   }
 
-  /* Particle Background */
+  /* Enhanced Particle Background System */
   .particle-background {
+    @apply absolute inset-0 overflow-hidden;
+    pointer-events: none;
+    contain: layout style paint;
+  }
+
+  .particle-background--static {
     @apply absolute inset-0 overflow-hidden;
     pointer-events: none;
   }
 
-  .particle {
-    @apply absolute rounded-full;
-    width: var(--particle-size);
-    height: var(--particle-size);
-    left: var(--particle-x);
-    top: var(--particle-y);
-    background: radial-gradient(circle at center, 
-      rgba(255, 255, 255, 0.8) 0%, 
-      rgba(255, 255, 255, 0.4) 60%, 
-      rgba(97, 206, 112, 0.3) 100%
-    );
-    box-shadow: 0 0 4px rgba(255, 255, 255, 0.3);
+  .particle-background__fallback {
+    @apply absolute inset-0;
+    background: radial-gradient(circle at 20% 80%, rgba(1, 112, 185, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(97, 206, 112, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(64, 84, 178, 0.1) 0%, transparent 50%);
     opacity: 0.6;
-    animation: particle-simple-float var(--particle-duration) ease-in-out infinite;
-    animation-delay: var(--particle-delay);
   }
 
-  /* Hover effects */
-  .animated-hero:hover .particle {
-    animation-play-state: paused;
-    transform: scale(1.1);
-    transition: transform 0.3s ease;
+  /* Base particle styles */
+  .particle {
+    @apply absolute;
+    pointer-events: none;
+    will-change: transform, opacity;
+    contain: strict;
+    backface-visibility: hidden;
+    transform-style: preserve-3d;
+  }
+
+  /* Particle Type: Dot */
+  .particle--dot {
+    border-radius: 50%;
+    background: radial-gradient(circle at center,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(255, 255, 255, 0.6) 40%,
+      rgba(1, 112, 185, 0.4) 70%,
+      rgba(97, 206, 112, 0.2) 100%
+    );
+    box-shadow: 
+      0 0 8px rgba(255, 255, 255, 0.4),
+      0 0 16px rgba(1, 112, 185, 0.2);
+    filter: blur(0.5px);
+  }
+
+  /* Particle Type: Orb */
+  .particle--orb {
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%,
+      rgba(255, 255, 255, 0.8) 0%,
+      rgba(1, 112, 185, 0.6) 30%,
+      rgba(64, 84, 178, 0.4) 60%,
+      rgba(97, 206, 112, 0.2) 100%
+    );
+    box-shadow: 
+      0 0 12px rgba(1, 112, 185, 0.5),
+      0 0 24px rgba(64, 84, 178, 0.3),
+      inset 0 0 8px rgba(255, 255, 255, 0.3);
+    filter: blur(1px);
+  }
+
+  /* Particle Type: Geometric */
+  .particle--geometric {
+    border-radius: 2px;
+    background: linear-gradient(45deg,
+      rgba(1, 112, 185, 0.8) 0%,
+      rgba(64, 84, 178, 0.6) 50%,
+      rgba(1, 112, 185, 0.4) 100%
+    );
+    box-shadow: 
+      0 0 6px rgba(1, 112, 185, 0.6),
+      0 0 12px rgba(64, 84, 178, 0.3);
+    transform-origin: center;
+  }
+
+  .particle--geometric::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    height: 70%;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 1px;
+    transform: translate(-50%, -50%) rotate(45deg);
+  }
+
+  /* Particle Type: Streak */
+  .particle--streak {
+    border-radius: 50px;
+    background: linear-gradient(90deg,
+      rgba(255, 255, 255, 0.9) 0%,
+      rgba(97, 206, 112, 0.7) 50%,
+      rgba(255, 255, 255, 0.3) 100%
+    );
+    box-shadow: 
+      0 0 8px rgba(255, 255, 255, 0.8),
+      0 0 16px rgba(97, 206, 112, 0.4);
+    filter: blur(1.5px);
+    width: 20px !important;
+    height: 2px !important;
+  }
+
+  /* Enhanced interaction effects */
+  .animated-hero:hover .particle--dot {
+    box-shadow: 
+      0 0 12px rgba(255, 255, 255, 0.6),
+      0 0 24px rgba(1, 112, 185, 0.4);
+  }
+
+  .animated-hero:hover .particle--orb {
+    box-shadow: 
+      0 0 16px rgba(1, 112, 185, 0.7),
+      0 0 32px rgba(64, 84, 178, 0.5),
+      inset 0 0 12px rgba(255, 255, 255, 0.4);
+  }
+
+  .animated-hero:hover .particle--geometric {
+    box-shadow: 
+      0 0 10px rgba(1, 112, 185, 0.8),
+      0 0 20px rgba(64, 84, 178, 0.5);
+  }
+
+  .animated-hero:hover .particle--streak {
+    box-shadow: 
+      0 0 12px rgba(255, 255, 255, 1),
+      0 0 24px rgba(97, 206, 112, 0.6);
+  }
+
+  /* Performance optimizations */
+  .particle-background {
+    transform: translateZ(0);
+  }
+
+  .particle {
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -497,12 +605,12 @@
   }
 }
 
-/* Accessibility - Respect reduced motion preference */
+/* Enhanced Accessibility - Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
   .animated-hero,
-  .animated-hero__content,
-  .particle {
+  .animated-hero__content {
     animation: none !important;
+    transition: none !important;
   }
   
   .animated-hero__gradient {
@@ -511,9 +619,58 @@
       var(--va-secondary) 50%, 
       color-mix(in srgb, var(--va-secondary) 80%, var(--va-accent) 20%) 100%
     );
+    animation: none !important;
   }
   
-  .particle {
+  /* Hide dynamic particles and show static fallback */
+  .particle-background:not(.particle-background--static) {
     display: none;
   }
+  
+  .particle-background--static .particle-background__fallback {
+    opacity: 0.8;
+    animation: none;
+  }
+  
+  .particle,
+  .particle--dot,
+  .particle--orb,
+  .particle--geometric,
+  .particle--streak {
+    display: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .particle-background__fallback {
+    background: radial-gradient(circle at 20% 80%, rgba(1, 112, 185, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(97, 206, 112, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(64, 84, 178, 0.2) 0%, transparent 50%);
+  }
+  
+  .particle--dot,
+  .particle--orb,
+  .particle--geometric,
+  .particle--streak {
+    filter: contrast(1.5) brightness(1.2);
+  }
+}
+
+/* Focus management for screen readers */
+.particle-background {
+  speak: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.particle-background::before {
+  content: '';
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
