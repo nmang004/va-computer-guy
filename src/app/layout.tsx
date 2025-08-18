@@ -4,6 +4,9 @@ import "./globals.css";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import AiChat from "@/components/chat/ai-chat";
+import { StructuredData } from "@/components/seo/structured-data";
+import { createBaseMetadata } from "@/lib/seo/metadata";
+import { generateOrganizationSchema, generateWebsiteSchema } from "@/lib/seo/schemas";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,18 +18,23 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Computer Guy | Computer Repair & IT Support Virginia Beach",
-  description: "Professional computer repair and IT support services in Virginia Beach and Hampton Roads. Fast, reliable solutions for home and business. Call (757) 375-6764.",
-};
+export const metadata: Metadata = createBaseMetadata();
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Generate global structured data
+  const organizationSchema = generateOrganizationSchema();
+  const websiteSchema = generateWebsiteSchema();
+
   return (
     <html lang="en">
+      <head>
+        <StructuredData data={organizationSchema} id="organization-schema" />
+        <StructuredData data={websiteSchema} id="website-schema" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >

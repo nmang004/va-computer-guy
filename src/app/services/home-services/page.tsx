@@ -6,6 +6,22 @@ import Image from "next/image";
 import { ArrowLeft, Phone, CheckCircle, Star } from "lucide-react";
 import { client } from "@/sanity/lib/client";
 import { servicesByCategoryQuery, serviceCategoriesQuery } from "@/sanity/lib/queries";
+import { createServiceMetadata } from "@/lib/seo/metadata";
+
+// Home Services page metadata
+export const metadata = createServiceMetadata(
+  "Home Computer Services",
+  "Personal computer and device repair for families and individuals",
+  "home-services",
+  [
+    "home computer repair virginia beach",
+    "pc repair virginia beach",
+    "mac repair virginia beach",
+    "home IT support",
+    "personal computer service",
+    "residential computer repair"
+  ]
+);
 
 interface Service {
   _id: string;

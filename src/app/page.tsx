@@ -5,8 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { QuoteGenerator } from "@/components/home/quote-generator";
 import { AnimatedHero } from "@/components/home/animated-hero";
+import { StructuredData } from "@/components/seo/structured-data";
 import { client } from "@/sanity/lib/client";
 import { featuredTestimonialsQuery, featuredPostsQuery } from "@/sanity/lib/queries";
+import { createHomepageMetadata } from "@/lib/seo/metadata";
+import { generateLocalBusinessSchema, generateHomeServicesSchema, generateBusinessServicesSchema, generateFAQPageSchema } from "@/lib/seo/schemas";
 import { 
   Shield, 
   Clock, 
@@ -18,6 +21,9 @@ import {
   Phone,
   Quote
 } from "lucide-react";
+
+// Homepage metadata with local SEO focus
+export const metadata = createHomepageMetadata();
 
 interface Testimonial {
   _id: string;
@@ -63,9 +69,23 @@ async function getHomepageData() {
 
 export default async function HomePage() {
   const { testimonials, featuredPosts } = await getHomepageData();
+  
+  // Generate structured data for homepage
+  const localBusinessSchema = generateLocalBusinessSchema();
+  const homeServicesSchema = generateHomeServicesSchema();
+  const businessServicesSchema = generateBusinessServicesSchema();
+  const faqSchema = generateFAQPageSchema();
+
   return (
-    <div className="flex flex-col">
-      {/* Animated Hero Section */}
+    <>
+      {/* Structured Data for Local SEO */}
+      <StructuredData data={localBusinessSchema} id="local-business-schema" />
+      <StructuredData data={homeServicesSchema} id="home-services-schema" />
+      <StructuredData data={businessServicesSchema} id="business-services-schema" />
+      <StructuredData data={faqSchema} id="faq-schema" />
+      
+      <div className="flex flex-col">
+        {/* Animated Hero Section */}
       <AnimatedHero className="py-20">
         <div className="va-container">
           <div className="text-center max-w-4xl mx-auto">
@@ -419,6 +439,7 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

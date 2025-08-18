@@ -3,10 +3,25 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { ArrowLeft, Phone, Award, Users, Clock, MapPin } from "lucide-react";
+import { createAboutMetadata } from "@/lib/seo/metadata";
+import { generateBreadcrumbSchema } from "@/lib/seo/schemas";
+import { StructuredData } from "@/components/seo/structured-data";
+import { SEO_CONFIG } from "@/lib/seo/constants";
+
+// About page metadata
+export const metadata = createAboutMetadata();
 
 export default function AboutPage() {
+  // Generate breadcrumb schema
+  const breadcrumbSchema = generateBreadcrumbSchema([
+    { name: "Home", url: SEO_CONFIG.siteUrl },
+    { name: "About", url: `${SEO_CONFIG.siteUrl}/about` }
+  ]);
+
   return (
-    <div className="va-container py-8">
+    <>
+      <StructuredData data={breadcrumbSchema} id="about-breadcrumb" />
+      <div className="va-container py-8">
       <div className="mb-6">
         <Button variant="ghost" asChild className="text-va-text-secondary hover:text-va-primary">
           <Link href="/">
@@ -156,6 +171,7 @@ export default function AboutPage() {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
